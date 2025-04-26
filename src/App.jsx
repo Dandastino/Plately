@@ -7,16 +7,18 @@ import Layout from '../layout/Layout'
 import Home from '../pages/Home'
 import Login from '../pages/Login'
 import Admin from '../pages/Admin';
+import DishDetail from '../pages/DishDetail';
 
 const App = () => {
   return (
     <Routes>
       <Route path='/' element={<Layout />}>
         <Route index element={<Home />} />
-        <Route path='/login' element={<Login />} />
+        <Route path='/dishes/:dishID' element={<DishDetail />} />  
         <Route path='/admin' element={<Admin />} />
-        <Route path='*' element={<NotFound />} />
       </Route>
+      <Route path='/login' element={<Login />} />
+      <Route path='*' element={<NotFound />} />
     </Routes>
   )
 }

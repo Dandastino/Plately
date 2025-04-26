@@ -6,7 +6,7 @@ const Login = () => {
     const [password, setPassword] = useState("")
     const navigate = useNavigate()
     
-    const handleSubmit = e => {
+    const handleSubmit = e => { 
         e.preventDefault()
 
         if (username && password){

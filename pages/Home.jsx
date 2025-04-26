@@ -1,14 +1,19 @@
-import Menu from "../components/Menu";
-import { useEffect, useState } from "react";
-import { FadeLoader } from "react-spinners"
-import MenuLayout from "../components/MenuLayout";
+import { useEffect, useState } from "react"
+import MenuLayout from "../components/MenuLayout"
+import { FadeLoader } from "react-spinners";
+import Menu from "../components/Menu"
+import { useSearchParams } from "react-router";
 
 const Home = () => {
     const [dishes, setDishes] = useState([]);
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(false)
-    const [type, setType] = useState("")
-    const [allergies, setAllergies] = useState("")
+    // const [type, setType] = useState("")
+    // const [allergies, setAllergies] = useState("")
+
+    const [serarchParams, setSearchParams] = useSearchParams()
+    const type = serarchParams.get("type") || ""
+    const allergies = serarchParams.get("allergies") || ""
 
     const fetchMenu = async () => {
         try {
@@ -32,7 +37,7 @@ const Home = () => {
         } finally {
             setLoading(false)
         }
-    };
+    }
     
     useEffect(() => {
         fetchMenu();
@@ -40,7 +45,7 @@ const Home = () => {
 
     return (
         <>
-            <MenuLayout setType = {setType} setAllergies = {setAllergies} fetchMenu = {fetchMenu}/>
+            <MenuLayout setSearchParams={setSearchParams} fetchMenu = {fetchMenu}/>
             <h1>Welcome to Plately 😺</h1>
             {!error && loading && <FadeLoader />}
             {error && <div>Failed to load dishes. Please try again.</div>}
@@ -53,7 +58,7 @@ const Home = () => {
             )}
 
         </>
-    );
-};
+    )
+}
 
 export default Home;
