@@ -1,12 +1,66 @@
-# React + Vite
+# 🍽️ Plately
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Plately is a modern and user-friendly restaurant menu application built with React. It allows users to browse, filter, and interact with a digital menu. The app supports filtering by course and allergies, and includes a feature to add new dishes.
 
-Currently, two official plugins are available:
+## 🚀 Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Display a complete list of restaurant dishes
+- Filter by course (appetizer, first course, main course, pizza, side, drink)
+- Filter by allergy category (meat, fish, vegetarian, vegan, gluten-free, etc.)
+- Smooth animations and loading indicators
+- Add new dishes via a dedicated form
+- Responsive design for desktop and mobile
+- Backend communication through RESTful API
 
-## Expanding the ESLint configuration
+## 🛠️ Tech Stack
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- React + React Router
+- PostgREST / Supabase / PostgreSQL
+- Bootstrap + React Spinners
+- Custom CSS
+- Optional: Lutris/Wine (for Linux gaming support, e.g., League of Legends)
+
+## 📦 Installation
+
+1. **Clone the repository:***
+   ```bash
+   git clone https://github.com/Dandastino/Plately.git
+   cd Plately```
+
+2. **Install dependencies:**
+  ```bash
+  npm install
+  ```
+
+3. **Start the development server:**
+  ```bash
+  npm run dev
+  ```
+
+4. **Make sure your backend (PostgREST or Supabase) is running and accessible at:**
+  ```arduino
+  http://localhost:3000
+  ```
+
+📁 Project Structure
+```css
+  src/
+  ├── components/
+  │   ├── Menu.jsx
+  │   ├── Menu.css
+  │   ├── MenuLayout.jsx
+  │   └── NewDishForm.jsx
+  ├── layout/
+  │   ├── Layout.jsx
+  │   ├── Navbar.jsx
+  │   └── Footer.jsx
+  ├── pages/
+  │   ├── Admin.jsx
+  │   ├── Home.jsx
+  │   ├── Login.jsx
+  │   └── NotFound.jsx
+  ├── App.jsx
+  ├── App.css
+  ├── Main.jsx
+  └── index.jsx
+```
