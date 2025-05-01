@@ -1,5 +1,7 @@
-import { Link } from "react-router";
-import "./Menu.css";
+import { Link } from "react-router"
+import "./Menu.css"
+import React from 'react'
+
 
 function Menu({id, name, photo, prezzo, selectedDish,handleSelect}) {
 

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router"
+import React from 'react'
 
 const DishDetail = () => {
     const navigate = useNavigate()

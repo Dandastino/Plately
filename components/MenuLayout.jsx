@@ -1,5 +1,6 @@
-import { useCallback } from 'react';
-import './MenuLayout.css';
+import { useCallback } from 'react'
+import React from 'react'
+import './MenuLayout.css'
 
 const MenuLayout = ({ setSearchParams }) => {
   const handleFilterChange = useCallback((key, value) => {
@@ -69,4 +70,4 @@ const MenuLayout = ({ setSearchParams }) => {
   );
 };
 
-export default MenuLayout;  
+export default MenuLayout; 

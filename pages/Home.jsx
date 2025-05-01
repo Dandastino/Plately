@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react"
 import MenuLayout from "../components/MenuLayout"
-import { FadeLoader } from "react-spinners";
+import { FadeLoader } from "react-spinners"
 import Menu from "../components/Menu"
-import { useSearchParams } from "react-router";
+import React from 'react'
+import { useSearchParams } from "react-router"
 
 const Home = () => {
     const [dishes, setDishes] = useState([]);
@@ -61,4 +62,4 @@ const Home = () => {
     )
 }
 
-export default Home;
+export default Home

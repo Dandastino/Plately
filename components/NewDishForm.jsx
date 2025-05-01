@@ -1,5 +1,6 @@
 import {useState} from "react"
 import {Alert, Button} from "react-bootstrap"
+import React from 'react'
 const NewDishForm = () =>{
 
     const [name, setName] = useState("")
