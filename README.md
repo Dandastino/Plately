@@ -1,27 +1,6 @@
 # 🍽️ Plately
 
 Plately is a modern and user-friendly restaurant menu application built with React. It allows users to browse, filter, and interact with a digital menu. The app supports filtering by course and allergies, and includes a feature to add new dishes.
-<<<<<<< HEAD
-x\
-## 🚀 Features
-
-- Display a complete list of restaurant dishes
-- Filter by course (appetizer, first course, main course, pizza, side, drink)
-- Filter by allergy category (meat, fish, vegetarian, vegan, gluten-free, etc.)
-- Smooth animations and loading indicators
-- Add new dishes via a dedicated form
-- Responsive design for desktop and mobile
-- Backend communication through RESTful API
-
-## 🛠️ Tech Stack
-
-- React + React Router
-- PostgREST / Supabase / PostgreSQL
-- Bootstrap + React Spinners
-- Custom CSS
-- Optional: Lutris/Wine (for Linux gaming support, e.g., League of Legends)
-
-=======
 
 ## 🚀 Features
 
@@ -41,17 +20,30 @@ x\
 - Custom CSS
 - Optional: Lutris/Wine (for Linux gaming support, e.g., League of Legends)
 
->>>>>>> 9ac0b69fd8daa13efd7daa671c8f4ba67c54d208
+## 🚀 Features
+
+- Display a complete list of restaurant dishes
+- Filter by course (appetizer, first course, main course, pizza, side, drink)
+- Filter by allergy category (meat, fish, vegetarian, vegan, gluten-free, etc.)
+- Smooth animations and loading indicators
+- Add new dishes via a dedicated form
+- Responsive design for desktop and mobile
+- Backend communication through RESTful API
+
+## 🛠️ Tech Stack
+
+- React + React Router
+- PostgREST / Supabase / PostgreSQL
+- Bootstrap + React Spinners
+- Custom CSS
+- Optional: Lutris/Wine (for Linux gaming support, e.g., League of Legends)
+
 ## 📦 Installation
 
 1. **Clone the repository:***
    ```bash
    git clone https://github.com/Dandastino/Plately.git
-<<<<<<< HEAD
-   cd Plately
-=======
    cd Plately```
->>>>>>> 9ac0b69fd8daa13efd7daa671c8f4ba67c54d208
 
 2. **Install dependencies:**
   ```bash
@@ -69,11 +61,7 @@ x\
   ```
 
 📁 Project Structure
-<<<<<<< HEAD
 ```bash
-=======
-```css
->>>>>>> 9ac0b69fd8daa13efd7daa671c8f4ba67c54d208
   src/
   ├── components/
   │   ├── Menu.jsx
@@ -96,12 +84,11 @@ x\
   |   ├── App.css
   |   ├── Main.jsx
   |   └── index.jsx
-=======
+  |
   │   ├── Login.jsx
   │   └── NotFound.jsx
   ├── App.jsx
   ├── App.css
   ├── Main.jsx
   └── index.jsx
->>>>>>> 9ac0b69fd8daa13efd7daa671c8f4ba67c54d208
 ```
