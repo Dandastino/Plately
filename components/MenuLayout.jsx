@@ -1,4 +1,5 @@
 import { useCallback } from 'react';
+import './MenuLayout.css';
 
 const MenuLayout = ({ setSearchParams }) => {
   const handleFilterChange = useCallback((key, value) => {

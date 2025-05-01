@@ -1,0 +1,33 @@
+/* Contenitore principale dei filtri */
+.filter-controls {
+    display: flex;
+    flex-direction: column;
+    width: 250px;
+    padding: 1rem;
+    background-color: #f8f9fa;
+    border-right: 1px solid #ccc;
+    height: 100%;
+    box-sizing: border-box;
+  }
+  
+  /* Ogni gruppo di filtro */
+  .filter-group {
+    margin-bottom: 1.5rem;
+  }
+  
+  .filter-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #333;
+  }
+  
+  /* Dropdown menu */
+  .filter-select {
+    width: 100%;
+    padding: 0.5rem;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+  }
+  

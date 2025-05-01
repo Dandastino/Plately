@@ -1,0 +1,19 @@
+.footer {
+    background-color: #f8f9fa;
+    font-size: 1.2rem;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    z-index: 1000;
+  }
+  
+  .footer-item {
+    cursor: pointer;
+    padding: 0.5rem;
+    transition: transform 0.2s ease;
+  }
+  
+  .footer-item:hover {
+    transform: scale(1.1);
+  }
+  

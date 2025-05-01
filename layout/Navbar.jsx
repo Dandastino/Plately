@@ -1,21 +1,24 @@
 import { NavLink } from "react-router"
+import './Navbar.css'
 
-function Navbar (){
+function Navbar () {
+  return (
+    <nav className="navbar">
+      <NavLink 
+        to="/home" 
+        className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}
+      >
+        Home
+      </NavLink>
 
-    const normalStyle = {
-        color : "#444"
-    }
-
-    const activeStyle = {
-        color : "#007bff"
-    }
-
-    return(
-        <nav>
-            <NavLink to="/" style = {({isActive}) => (isActive ? activeStyle : normalStyle)}>Home</NavLink>
-            <NavLink to="/Admin" style = {({isActive}) => (isActive ? activeStyle : normalStyle)}>Add Dish</NavLink>
-        </nav>
-    )
+      <NavLink 
+        to="/admin" 
+        className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}
+      >
+        Add Dish
+      </NavLink>
+    </nav>
+  );
 }
 
 export default Navbar

@@ -1,4 +1,3 @@
-import { useEffect } from "react"
 import { Link } from "react-router";
 import "./Menu.css";
 
@@ -16,7 +15,7 @@ function Menu({id, name, photo, prezzo, selectedDish,handleSelect}) {
       <img 
         src={photo} 
         alt={name || "Menu item"} 
-        loading="lazy" 
+        loading="lazy"
       />
       <p>Price: {prezzo}€</p>
       

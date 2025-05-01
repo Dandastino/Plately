@@ -1,7 +1,7 @@
 # 🍽️ Plately
 
 Plately is a modern and user-friendly restaurant menu application built with React. It allows users to browse, filter, and interact with a digital menu. The app supports filtering by course and allergies, and includes a feature to add new dishes.
-
+x\
 ## 🚀 Features
 
 - Display a complete list of restaurant dishes
@@ -25,7 +25,7 @@ Plately is a modern and user-friendly restaurant menu application built with Rea
 1. **Clone the repository:***
    ```bash
    git clone https://github.com/Dandastino/Plately.git
-   cd Plately```
+   cd Plately
 
 2. **Install dependencies:**
   ```bash
@@ -43,7 +43,7 @@ Plately is a modern and user-friendly restaurant menu application built with Rea
   ```
 
 📁 Project Structure
-```css
+```bash
   src/
   ├── components/
   │   ├── Menu.jsx
@@ -57,10 +57,12 @@ Plately is a modern and user-friendly restaurant menu application built with Rea
   ├── pages/
   │   ├── Admin.jsx
   │   ├── Home.jsx
+  │   ├── DishDetail.jsx
   │   ├── Login.jsx
   │   └── NotFound.jsx
-  ├── App.jsx
-  ├── App.css
-  ├── Main.jsx
-  └── index.jsx
+  ├── src/
+  |   ├── App.jsx
+  |   ├── App.css
+  |   ├── Main.jsx
+  |   └── index.jsx
 ```

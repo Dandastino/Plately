@@ -12,7 +12,7 @@ const Login = () => {
         if (username && password){
             //invio un post al server
 
-            navigate("/")
+            navigate("/home")
         }else{
             alert("Uncorrect username or password")
         }
