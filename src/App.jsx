@@ -11,21 +11,31 @@ import Admin from '../pages/Admin';
 import DishDetail from '../pages/DishDetail';
 import Guest from '../pages/Guest';
 import Cart from '../pages/Cart'
+import { AuthProvider } from '../contexts/AuthContext'
+
+import ProtectedRoute from '../components/ProtectedRoute'
 
 const App = () => {
   return (
-    <Routes>
+    <AuthProvider>
+      <Routes>
+        <Route path='/login' element={<Login />} />
         <Route index element={<Login />} />
-      <Route path='/' element={<Layout />}>
-        <Route path='/guest' element={<Guest />}/>
-        <Route path='/home' element={<Home />}/>
-        <Route path='/cart' element={<Cart />}/>
-        <Route path='/dishes/:dishID' element={<DishDetail />} />  
-        <Route path='/admin' element={<Admin />} />
-      </Route>
-      <Route path='/login' element={<Login />} />
-      <Route path='*' element={<NotFound />} />
-    </Routes>
+        <Route element={<ProtectedRoute />}>
+          <Route path='/' element={<Layout />}>
+            <Route path='/guest' element={<Guest />} />
+            <Route path='/home' element={<Home />} />
+            <Route path='/cart' element={<Cart />} />
+            <Route path='/dishes/:dishID' element={<DishDetail />} />
+            <Route element={<ProtectedRoute requiredRole="admin" />}>
+              <Route path='/admin' element={<Admin />} />
+            </Route>
+          </Route>
+        </Route>
+        <Route path='*' element={<NotFound />} />
+      </Routes>
+    </AuthProvider>
   )
 }
+
 export default App

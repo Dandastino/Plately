@@ -8,7 +8,7 @@ import { useSearchParams } from "react-router"
 const Home = () => {
     const [dishes, setDishes] = useState([]);
     const [loading, setLoading] = useState(true)
-    const [error, setError] = useState(false)
+    const [error, setError] = useState("")
     const [selectedProduct, setSelectedProduct] = useState(null)
 
     const [serarchParams, setSearchParams] = useSearchParams()
@@ -32,8 +32,7 @@ const Home = () => {
             const menu = await response.json()
             setDishes(menu)
         } catch (error) {
-            console.error("Failed to fetch menu:", error)
-            setError(true)
+            setError(err.response?.data?.message || "Failed to fetch the menu.")
         } finally {
             setLoading(false)
         }

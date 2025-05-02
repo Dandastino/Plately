@@ -1,38 +1,72 @@
-import { useState } from "react"
-import { useNavigate } from "react-router"
-import React from 'react'
+import { useState } from "react";
+import { useNavigate, useLocation } from "react-router";
+import React from 'react';
+import { useAuth } from '../contexts/AuthContext';
+import { FadeLoader } from "react-spinners"
 
 
 const Login = () => {
-    const [username, setUsername] = useState("")
-    const [password, setPassword] = useState("")
-    const [error, setError] = useState("") 
-    const navigate = useNavigate()
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+    const [error, setError] = useState("");
+    const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
+    const location = useLocation();
+    const { login } = useAuth();
     
-    const handleSubmit = e => { 
-        e.preventDefault()
+    // Controlla se c'è un percorso di redirect salvato nello state
+    const from = location.state?.from?.pathname || "/guest";
+    
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+        setError("");
 
-        if (username === "admin" && password  === "admin"){
-            navigate("/guest")
-        }else{
-            setError("Please enter a valid username and password")
+        try {
+            const result = await login(username, password);
+            
+            if (result.success) {
+                if (from !== "/login") {
+                    navigate(from);
+                } else {
+                    navigate("/guest");
+                }
+            } else {
+                setError(result.error);
+            }
+            
+        } catch (err) {
+            console.error("Login error:", err);
+            setError("Eorror during Login, retry.");
+        } finally {
+            setLoading(false);
         }
-    }
+    };
 
     return ( 
-        <div>
-            <h2>Insert Username and Password to start</h2>
+        <div className="login-container">
+            <h2>Inserisci username e password</h2>
             <form onSubmit={handleSubmit}>
-                <label>Username</label>
-                <input type="text" value={username} onChange={e => setUsername(e.target.value)}/>
-                <label>Password</label>
-                <input type="password" value={password} onChange={e => setPassword(e.target.value)}/>
+                <div className="form-group">
+                    <label>Username</label>
+                    <input type="text" value={username} onChange={e => setUsername(e.target.value)} required autoComplete="username"
+                    />
+                </div>
                 
-                <button type="submit">Login</button>
+                <div className="form-group">
+                    <label>Password</label>
+                    <input type="password" value={password} onChange={e => setPassword(e.target.value)} required autoComplete="current-password"
+                    />
+                </div>
+                
+                <button type="submit" disabled={loading}>
+                    {loading ? <FadeLoader /> : "LogIn"}
+                </button>
 
-                {error && <p style={{color: "red"}}>{error}</p>} 
+                {error && <p className="error-message">{error}</p>} 
             </form>
         </div>
-    )
-}
-export default Login
+    );
+};
+
+export default Login;

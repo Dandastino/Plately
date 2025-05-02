@@ -3,23 +3,37 @@
   import React, { useState } from 'react';
   import Modal from 'react-bootstrap/Modal';
   import Button from 'react-bootstrap/Button';
+  import { useAuth } from '../contexts/AuthContext';
+
+
 
   const Footer = ({ tableNumber, guests, onTableClose }) => {
     const navigate = useNavigate();
-    const [showModal, setShowModal] = useState(false);
+    const [showModal, setShowModal] = useState(false);    
+    const {logout} = useAuth()
+
     
+
     const handleCloseTable = () => {
       setShowModal(true);
     };
 
-    const confirmCloseTable = () => {
-      if (onTableClose) {
-        onTableClose();
+    const confirmCloseTable = async (e) => {
+      e.preventDefault();
+      
+      try {
+        await logout();
+        
+        if (onTableClose) {
+          onTableClose();
+        }
+        
+        navigate("/");
+      } catch (error) {
+        console.error("Logout error:", error);
+      } finally {
+        setShowModal(false);
       }
-    
-      navigate("/");
-
-      setShowModal(false);
     };
 
     return (

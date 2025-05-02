@@ -34,17 +34,18 @@ const Guest = ({}) =>{
 
     return(
         <form onSubmit={handleSubmit}>
-            <div>
-                <label htmlFor="">How many guests are there?</label>
+            <>
+                <label htmlFor="">Enter the table's number</label>
+                <input type="number" value={table} onChange={e => setTable(e.target.value)}/>
+
+                <label htmlFor="">Enter the Guest number</label>
                 <input type="number" value={guest} onChange={e => setGuest(e.target.value)}/>
 
-                <label htmlFor="">In which table are they going to stay?</label>
-                <input type="number" value={table} onChange={e => setTable(e.target.value)}/>
 
                 <button type="submit">Confirm</button>
 
                 {error && <p style={{color: "red"}}>{error}</p>} 
-            </div>
+            </>
         </form>
     )
 }
