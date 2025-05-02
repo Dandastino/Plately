@@ -10,14 +10,16 @@ import Login from '../pages/Login'
 import Admin from '../pages/Admin';
 import DishDetail from '../pages/DishDetail';
 import Guest from '../pages/Guest';
+import Cart from '../pages/Cart'
 
 const App = () => {
   return (
     <Routes>
         <Route index element={<Login />} />
-        <Route path='/guest' element={<Guest />}/>
       <Route path='/' element={<Layout />}>
+        <Route path='/guest' element={<Guest />}/>
         <Route path='/home' element={<Home />}/>
+        <Route path='/cart' element={<Cart />}/>
         <Route path='/dishes/:dishID' element={<DishDetail />} />  
         <Route path='/admin' element={<Admin />} />
       </Route>

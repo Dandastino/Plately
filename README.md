@@ -75,16 +75,16 @@ Plately is a modern and user-friendly restaurant menu application built with Rea
   ├── pages/
   │   ├── Admin.jsx
   │   ├── Home.jsx
-<<<<<<< HEAD
+  │ HEAD
   │   ├── DishDetail.jsx
   │   ├── Login.jsx
   │   └── NotFound.jsx
   ├── src/
-  |   ├── App.jsx
-  |   ├── App.css
-  |   ├── Main.jsx
-  |   └── index.jsx
-  |
+  │   ├── App.jsx
+  │   ├── App.css
+  │   ├── Main.jsx
+  │   └── index.jsx
+  │
   │   ├── Login.jsx
   │   └── NotFound.jsx
   ├── App.jsx

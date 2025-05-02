@@ -1,19 +1,74 @@
-import './Footer.css';
-import React from 'react'
+  import { useNavigate } from 'react-router';
+  import './Footer.css';
+  import React, { useState } from 'react';
+  import Modal from 'react-bootstrap/Modal';
+  import Button from 'react-bootstrap/Button';
 
+  const Footer = ({ tableNumber, guests, onTableClose }) => {
+    const navigate = useNavigate();
+    const [showModal, setShowModal] = useState(false);
+    
+    const handleCloseTable = () => {
+      setShowModal(true);
+    };
 
-const Footer = ({ tableNumber = 5, guests = 2 }) => {
-  return (
-    <footer className="footer d-flex justify-content-around align-items-center py-2 px-3 border-top">
-      <div className="footer-item" title="Vai alla home">🏠 Home</div>
+    const confirmCloseTable = () => {
+      if (onTableClose) {
+        onTableClose();
+      }
+    
+      navigate("/");
 
-      <div className="footer-item" title="Tavolo attuale">🪑 Table {tableNumber}</div>
+      setShowModal(false);
+    };
 
-      <div className="footer-item" title="Numero di persone sedute">👥 Guest{guests}</div>
+    return (
+      <>
+        <footer className="footer d-flex justify-content-around align-items-center py-2 px-3 border-top">
+          <div className="footer-item" title="Go to the Home Page" onClick={() => navigate("/home")}>
+            🏠 Home
+          </div>
 
-      <div className="footer-item" title="Visualizza carrello">🛒 Cart</div>
-    </footer>
-  )
-}
+          <div className="footer-item" title="Table's number">
+            🪑 Table {tableNumber ?? "?"}
+          </div>
 
-export default Footer
+          <div className="footer-item" title="Guests">
+            👥 {guests ? `${guests} Guest${guests !== 1 ? 's' : ''}` : "?"}
+          </div>
+
+          <div className="footer-item" title="Show cart" onClick={() => navigate("/cart")}>
+            🛒 Cart
+          </div>
+
+          <div 
+            className="footer-item close-table" 
+            title="Close Table" 
+            onClick={handleCloseTable}
+          >
+            💵 Ask for the Bill
+          </div>
+        </footer>
+
+        <Modal show={showModal} onHide={() => setShowModal(false)} centered>
+          <Modal.Header closeButton>
+            <Modal.Title>Confirm Table Closure</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            Are you sure you want to close table {tableNumber}?<br />
+            This action cannot be undone.
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={() => setShowModal(false)}>
+              Cancel
+            </Button>
+            <Button variant="danger" onClick={confirmCloseTable}>
+              Confirm Closure
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      </>
+    );
+  };
+
+  export default Footer;

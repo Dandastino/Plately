@@ -1,29 +1,33 @@
 import { useState } from "react"
 import React from "react"
-import { Form, useNavigate } from "react-router"
+import { Form, useNavigate, useOutletContext } from "react-router"
 
 
-const Guest = () =>{
+const Guest = ({}) =>{
 
     const [table, setTable] = useState("")
     const [guest, setGuest] = useState("")
     const [error, setError] = useState("") 
     const navigate = useNavigate()
 
+    const {setTableNumber, setGuests} = useOutletContext()
+
     const handleSubmit = e => {
         e.preventDefault()
         
         const numGuests = parseInt(guest)
-        const tableNum = parseInt(table)
+        const numTable = parseInt(table)
 
 
         if (isNaN(numGuests) || numGuests <= 0) {
             setError("Please enter a positive number of guests")
         } else if (isNaN(numGuests)) {
             setError("Please enter a valid number of guests")
-        } else if (isNaN(tableNum)) {
+        } else if (isNaN(numTable)) {
             setError("Please enter a valid table number")
         } else {
+            setGuests(numGuests)
+            setTableNumber(numTable)
             navigate("/home")
         }
     }

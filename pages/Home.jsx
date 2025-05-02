@@ -9,8 +9,7 @@ const Home = () => {
     const [dishes, setDishes] = useState([]);
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(false)
-    // const [type, setType] = useState("")
-    // const [allergies, setAllergies] = useState("")
+    const [selectedProduct, setSelectedProduct] = useState(null)
 
     const [serarchParams, setSearchParams] = useSearchParams()
     const type = serarchParams.get("type") || ""
@@ -44,6 +43,10 @@ const Home = () => {
         fetchMenu();
     }, [type, allergies]);
 
+    const handleSelect = (selected) => {
+        setSelectedProduct(selected)
+      }
+
     return (
         <>
             <MenuLayout setSearchParams={setSearchParams} fetchMenu = {fetchMenu}/>
@@ -54,9 +57,16 @@ const Home = () => {
             dishes.map((dish) => (<Menu key={dish.id}{...dish}/>
             ))
             )}
-            {!error && !loading && dishes.length === 0 && (
-            <div>Nothing for this selection 😿</div>
-            )}
+            {!error && !loading && dishes.length > 0 && (
+            dishes.map((dish) => (
+                <Menu
+                key={dish.id}
+                {...dish}
+                selectedDish={selectedProduct}
+                handleSelect={handleSelect}
+                />
+            ))
+)}
 
         </>
     )

@@ -6,7 +6,7 @@ const DishDetail = () => {
     const navigate = useNavigate()
     const [dish, setDish] = useState(null)
     const [loading, setLoading] = useState(true)
-    const [error, setError] = useState(false)
+    const [error, setError] = useState(null)
     const { dishID } = useParams()
 
 
@@ -16,9 +16,19 @@ const DishDetail = () => {
                 setLoading(true)
                 setError(null)
 
-                const response = await fetch(`http://localhost:3000/dishes/${dishID}`);
-                const dish = await response.json()
-                setDish(dish)
+                const response = await fetch(`http://localhost:3000/dishes?id=eq.${dishID}`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`)
+                }
+
+                const data = await response.json()
+                
+                if (!data || data.length === 0) {
+                    throw new Error('Dish not found')
+                }
+                
+                setDish(data[0])
+
 
             } catch (error) {
                 setError(error.message)
