@@ -1,6 +1,8 @@
 # 🍽️ Plately
 
-Plately is a modern and user-friendly restaurant menu application built with React. It allows users to browse, filter, and interact with a digital menu. The app supports filtering by course and allergies, and includes a feature to add new dishes.
+## 👨‍💻 Front End Project 
+
+Plately is a modern and user-friendly restaurant menu application built with React. It allows users to browse, filter, and interact with a digital menu. The app supports filtering by course and allergies, and includes a feature, for admins, to add new dishes.
 
 ## 🚀 Features
 
@@ -36,7 +38,6 @@ Plately is a modern and user-friendly restaurant menu application built with Rea
 - PostgREST / Supabase / PostgreSQL
 - Bootstrap + React Spinners
 - Custom CSS
-- Optional: Lutris/Wine (for Linux gaming support, e.g., League of Legends)
 
 ## 📦 Installation
 
@@ -60,35 +61,35 @@ Plately is a modern and user-friendly restaurant menu application built with Rea
   http://localhost:3000
   ```
 
-📁 Project Structure
+
+## 🐳 Backend Setup with Docker
+
+Start the backend containers using Docker:
+
+**From the project’s root directory, run:**
 ```bash
-  src/
-  ├── components/
-  │   ├── Menu.jsx
-  │   ├── Menu.css
-  │   ├── MenuLayout.jsx
-  │   └── NewDishForm.jsx
-  ├── layout/
-  │   ├── Layout.jsx
-  │   ├── Navbar.jsx
-  │   └── Footer.jsx
-  ├── pages/
-  │   ├── Admin.jsx
-  │   ├── Home.jsx
-  │ HEAD
-  │   ├── DishDetail.jsx
-  │   ├── Login.jsx
-  │   └── NotFound.jsx
-  ├── src/
-  │   ├── App.jsx
-  │   ├── App.css
-  │   ├── Main.jsx
-  │   └── index.jsx
-  │
-  │   ├── Login.jsx
-  │   └── NotFound.jsx
-  ├── App.jsx
-  ├── App.css
-  ├── Main.jsx
-  └── index.jsx
+docker-compose up -d
 ```
+
+This will start two containers:
+- db: PostgreSQL database
+- api: PostgREST server exposing the RESTful API
+
+### ✅ Verify the backend is running:
+
+**Check the container status:**
+```bash
+docker-compose ps
+```
+
+**View backend logs:**
+```bash
+docker-compose logs -f api
+```
+
+### 🌐 Use the backend in the frontend:
+
+Once running, the backend will be available at:
+
+```arduino
+http://localhost:3000```
