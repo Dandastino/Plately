@@ -15,19 +15,16 @@ const NewDishForm = () => {
     let isValid = true
     const newErrors = {}
 
-    // Name validation
     if (!name.trim()) {
       isValid = false
       newErrors.name = "Name is required"
     }
 
-    // Type validation
     if (!type) {
       isValid = false
       newErrors.type = "Course type is required"
     }
 
-    // Price validation
     if (!price) {
       isValid = false
       newErrors.price = "Price is required"
@@ -45,66 +42,47 @@ const NewDishForm = () => {
 
     if (!validateForm()) return
 
-    // Make sure all required fields have values
-    if (!name || !type) {
-      setErrors({
-        ...errors,
-        form: "Please fill out all required fields"
-      })
+    if (!name || !type || !price) {
+      setErrors({...errors,form: "Please fill out all required fields"})
       return
     }
 
-    // Format the data according to what the server expects
     const dishData = {
-      name,
-      type,
-      // Only include photo if it's provided
+      name, type,
       ...(photo && { photo }),
-      // Only include allergies if it's provided
       ...(allergies && { allergies }),
-      // Only include description if it's provided
       ...(description && { description }),
-      // Ensure price is a number and use the correct field name "prezzo" instead of "price"
       prezzo: price ? parseFloat(price) : 0,
     }
-
-    console.log("Sending data to server:", dishData)
 
     try {
       const response = await fetch("http://localhost:3000/dishes", {
         method: "POST",
-        headers: { 
-          "Content-Type": "application/json",
-          // Add any authentication headers if needed
-          // "Authorization": "Bearer your-token-here"
-        },
+        headers: { "Content-Type": "application/json",},
         body: JSON.stringify(dishData),
       })
 
       if (!response.ok) {
-        // Try to get more detailed error info from response
-        let errorMessage = `Server responded with status: ${response.status}`;
+        let errorMessage = `Server responded with status: ${response.status}`
         try {
-          const errorData = await response.json();
-          errorMessage = errorData.message || errorMessage;
+          const errorData = await response.json()
+          errorMessage = errorData.message || errorMessage
         } catch (e) {
-          // If we can't parse the error response, stick with the default message
+          errorMessage = "Failed to parse error response"
         }
-        throw new Error(errorMessage);
+        throw new Error(errorMessage)
       }
 
-      // Try to parse the response, but handle cases where it might not be JSON
-      let responseData;
+      let responseData
       try {
-        responseData = await response.json();
+        responseData = await response.json()
       } catch (e) {
-        responseData = { id: "success", message: "Dish added successfully" };
+        responseData = { id: "success", message: "Dish added successfully" }
       }
       
       setResponse(responseData)
       console.log("Success response:", responseData)
       
-      // Reset form after successful submission
       setName("")
       setType("appetizer")
       setPhoto("")
@@ -138,29 +116,15 @@ const NewDishForm = () => {
           <Col md={6}>
             <Form.Group className="mb-3">
               <Form.Label htmlFor="name">Name*</Form.Label>
-              <Form.Control
-                id="name"
-                type="text"
-                placeholder="Dish Name"
-                value={name}
-                onChange={(event) => setName(event.target.value)}
-                isInvalid={!!errors.name}
-              />
-              <Form.Control.Feedback type="invalid">
-                {errors.name}
-              </Form.Control.Feedback>
+              <Form.Control id="name" type="text" placeholder="Dish Name" value={name}onChange={(event) => setName(event.target.value)} isInvalid={!!errors.name} />
+              <Form.Control.Feedback type="invalid">{errors.name}</Form.Control.Feedback>
             </Form.Group>
           </Col>
           
           <Col md={6}>
             <Form.Group className="mb-3">
               <Form.Label htmlFor="type">Course*</Form.Label>
-              <Form.Select
-                id="type"
-                value={type}
-                onChange={(event) => setType(event.target.value)}
-                isInvalid={!!errors.type}
-              >
+              <Form.Select id="type" value={type} onChange={(event) => setType(event.target.value)} isInvalid={!!errors.type}>
                 <option value="appetizer">Appetizer</option>
                 <option value="primo">First Course</option>
                 <option value="secondo">Second Course</option>
@@ -168,44 +132,26 @@ const NewDishForm = () => {
                 <option value="side">Side</option>
                 <option value="drink">Drink</option>
               </Form.Select>
-              <Form.Control.Feedback type="invalid">
-                {errors.type}
-              </Form.Control.Feedback>
+              <Form.Control.Feedback type="invalid">{errors.type}</Form.Control.Feedback>
             </Form.Group>
           </Col>
         </Row>
         
         <Form.Group className="mb-3">
           <Form.Label htmlFor="photo">Image URL</Form.Label>
-          <Form.Control
-            id="photo"
-            type="text"
-            placeholder="Dish Image URL"
-            value={photo}
-            onChange={(event) => setPhoto(event.target.value)}
-          />
+          <Form.Control id="photo" type="text" placeholder="Dish Image URL" value={photo} onChange={(event) => setPhoto(event.target.value)}/>
         </Form.Group>
         
         <Form.Group className="mb-3">
           <Form.Label htmlFor="description">Description</Form.Label>
-          <Form.Control
-            id="description"
-            as="textarea"
-            rows={3}
-            value={description}
-            onChange={(event) => setDescription(event.target.value)}
-          />
+          <Form.Control id="description" as="textarea" rows={3} value={description} onChange={(event) => setDescription(event.target.value)}/>
         </Form.Group>
         
         <Row>
           <Col md={6}>
             <Form.Group className="mb-3">
               <Form.Label htmlFor="allergies">Dietary Info</Form.Label>
-              <Form.Select
-                id="allergies"
-                value={allergies}
-                onChange={(event) => setAllergies(event.target.value)}
-              >
+              <Form.Select id="allergies" value={allergies} onChange={(event) => setAllergies(event.target.value)}>
                 <option value="">None specified</option>
                 <option value="fish">Sea Food</option>
                 <option value="land">Land Animal</option>
@@ -219,25 +165,13 @@ const NewDishForm = () => {
           <Col md={6}>
             <Form.Group className="mb-3">
               <Form.Label htmlFor="price">Prezzo* (€)</Form.Label>
-              <Form.Control
-                id="price"
-                type="number"
-                step="0.01"
-                placeholder="Dish Price"
-                value={price}
-                onChange={(event) => setPrice(event.target.value)}
-                isInvalid={!!errors.price}
-              />
-              <Form.Control.Feedback type="invalid">
-                {errors.price}
-              </Form.Control.Feedback>
+              <Form.Control id="price" type="number" step="0.10" placeholder="Dish Price" value={price} onChange={(event) => setPrice(event.target.value)} isInvalid={!!errors.price}/>
+              <Form.Control.Feedback type="invalid"> {errors.price} </Form.Control.Feedback>
             </Form.Group>
           </Col>
         </Row>
         
-        <Button variant="primary" type="submit" className="mt-3">
-          Add Dish
-        </Button>
+        <Button variant="primary" type="submit" className="mt-3">Add Dish</Button>
       </Form>
     </Container>
   )

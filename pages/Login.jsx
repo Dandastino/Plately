@@ -1,51 +1,62 @@
-import { useState } from "react";
-import { useNavigate, useLocation } from "react-router";
-import React from 'react';
-import { useAuth } from '../contexts/AuthContext';
-import { FadeLoader } from "react-spinners";
-import { Container, Form, Button, Alert, Card } from "react-bootstrap";
+import { useState, useEffect } from "react"
+import { useNavigate } from "react-router"
+import React from 'react'
+import { useAuth } from '../contexts/AuthContext'
+import { FadeLoader } from "react-spinners"
+import { Container, Form, Button, Alert, Card } from "react-bootstrap"
+import "./Login.css"
 
 const Login = () => {
-    const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
-    const [error, setError] = useState("");
-    const [loading, setLoading] = useState(false);
-    const navigate = useNavigate();
-    const location = useLocation();
-    const { login } = useAuth();
+    const [username, setUsername] = useState("")
+    const [password, setPassword] = useState("")
+    const [error, setError] = useState("")
+    const [loading, setLoading] = useState(false)
+    const navigate = useNavigate()
+    const { login, isAuthenticated, currentUser } = useAuth()
     
-    const from = location.state?.from?.pathname || "/guest";
+    useEffect(() => {
+        if (isAuthenticated) {
+            if (currentUser?.role === "admin") {
+                navigate("/admin")
+            } else {
+                navigate("/guest")
+            }
+        }
+    }, [isAuthenticated, currentUser, navigate])
     
     const handleSubmit = async (e) => {
-        e.preventDefault();
+        e.preventDefault()
         
-        setLoading(true);
-        setError("");
+
+        setLoading(true)
+        setError("")
 
         try {
-            const result = await login(username, password);
+            const result = await login(username, password)
             
             if (result.success) {
-                setError("");
+                setError("")
                 
-                if (from !== "/login") {
-                    navigate(from);
-                } else if (result.user.role === "admin") {
-                    navigate("/admin");
+                if (result.user.role === "admin") {
+                    navigate("/admin")
                 } else {
-                    navigate("/guest");
+                    navigate("/guest")
                 }
             } else {
-                setError(result.error || "Invalid username or password");
+                setError(result.error || "Invalid username or password")
             }
             
         } catch (err) {
-            console.error("Login error:", err);
-            setError("Error during login. Please try again.");
+            console.error("Login error:", err)
+            setError("Error during login. Please try again.")
         } finally {
-            setLoading(false);
+            setLoading(false)
         }
-    };
+    }
+
+    if (isAuthenticated) {
+        return null
+    }
 
     return (
         <Container className="d-flex align-items-center justify-content-center" style={{ minHeight: "100vh" }}>
@@ -54,51 +65,22 @@ const Login = () => {
                     <Card.Body>
                         <h2 className="text-center mb-4">Welcome to Plately</h2>
                         
-                        {error && (
-                            <Alert variant="danger" dismissible onClose={() => setError("")}>
-                                {error}
-                            </Alert>
-                        )}
+                        {error && (<Alert variant="danger" dismissible onClose={() => setError("")}>{error}</Alert>)}
                         
                         <Form onSubmit={handleSubmit}>
                             <Form.Group className="mb-3">
                                 <Form.Label>Username</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    value={username}
-                                    onChange={(e) => setUsername(e.target.value)}
-                                    required
-                                    autoComplete="username"
-                                    placeholder="Enter your username"
-                                />
+                                <Form.Control type="text"value={username} onChange={(e) => setUsername(e.target.value)} required autoComplete="username"placeholder="Enter your username"/>
                             </Form.Group>
                             
                             <Form.Group className="mb-4">
                                 <Form.Label>Password</Form.Label>
-                                <Form.Control
-                                    type="password"
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
-                                    required
-                                    autoComplete="current-password"
-                                    placeholder="Enter your password"
-                                />
+                                <Form.Control type="password" value={password} onChange={(e) => setPassword(e.target.value)} required autoComplete="current-password" placeholder="Enter your password"/>
                             </Form.Group>
                             
                             <div className="d-grid gap-2">
-                                <Button
-                                    variant="primary"
-                                    type="submit"
-                                    disabled={loading}
-                                    className="py-2"
-                                >
-                                    {loading ? (
-                                        <div className="d-flex justify-content-center">
-                                            <FadeLoader color="#ffffff" height={10} width={3} radius={1} margin={2} />
-                                        </div>
-                                    ) : (
-                                        "Log In"
-                                    )}
+                                <Button variant="primary" type="submit" disabled={loading} className="py-2">
+                                    {loading ? <div><FadeLoader /></div> : ("Log In")}
                                 </Button>
                             </div>
                         </Form>
@@ -106,7 +88,7 @@ const Login = () => {
                 </Card>
             </div>
         </Container>
-    );
-};
+    )
+}
 
-export default Login;
+export default Login

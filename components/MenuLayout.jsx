@@ -5,15 +5,15 @@ import './MenuLayout.css'
 const MenuLayout = ({ setSearchParams }) => {
   const handleFilterChange = useCallback((key, value) => {
     setSearchParams(prevParams => {
-      const newParams = new URLSearchParams(prevParams);
+      const newParams = new URLSearchParams(prevParams)
       if (value) {
-        newParams.set(key, value);
+        newParams.set(key, value)
       } else {
-        newParams.delete(key);
+        newParams.delete(key)
       }
-      return newParams;
-    });
-  }, [setSearchParams]);
+      return newParams
+    })
+  }, [setSearchParams])
 
   const filterOptions = {
     course: [
@@ -33,7 +33,7 @@ const MenuLayout = ({ setSearchParams }) => {
       { value: 'vegan', label: 'Vegan' },
       { value: 'gluten free', label: 'Gluten Free' }
     ]
-  };
+  }
 
   return (
     <div className="filter-controls">
@@ -67,7 +67,7 @@ const MenuLayout = ({ setSearchParams }) => {
         </select>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default MenuLayout; 
+export default MenuLayout

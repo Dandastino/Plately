@@ -12,15 +12,17 @@ import DishDetail from '../pages/DishDetail';
 import Guest from '../pages/Guest';
 import Cart from '../pages/Cart'
 import { AuthProvider } from '../contexts/AuthContext'
+import { ProtectedRoute, GuestRoute } from "../components/AuthRoutes";
 
-import ProtectedRoute from '../components/ProtectedRoute'
 
 const App = () => {
   return (
     <AuthProvider>
       <Routes>
-        <Route path='/login' element={<Login />} />
-        <Route index element={<Login />} />
+        <Route element={<GuestRoute />}>
+          <Route path='/login' element={<Login />} />
+          <Route index element={<Login />} />
+        </Route>
         <Route element={<ProtectedRoute />}>
           <Route path='/' element={<Layout />}>
             <Route path='/guest' element={<Guest />} />
