@@ -27,8 +27,13 @@
         if (onTableClose) {
           onTableClose();
         }
-        
+
+        tableNumber = null;
+        guests = null;
+        localStorage.removeItem("tableNumber");
+        localStorage.removeItem("guests");
         navigate("/");
+        
       } catch (error) {
         console.error("Logout error:", error);
       } finally {
@@ -49,6 +54,10 @@
 
           <div className="footer-item" title="Guests">
             👥 {guests ? `${guests} Guest${guests !== 1 ? 's' : ''}` : "?"}
+          </div>
+
+          <div className="footer-item" title="Admin Panel" onClick={() => navigate("/admin")}>
+            ⚙️ Admin
           </div>
 
           <div className="footer-item" title="Show cart" onClick={() => navigate("/cart")}>

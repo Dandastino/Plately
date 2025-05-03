@@ -11,9 +11,9 @@ const Home = () => {
     const [error, setError] = useState("")
     const [selectedProduct, setSelectedProduct] = useState(null)
 
-    const [serarchParams, setSearchParams] = useSearchParams()
-    const type = serarchParams.get("type") || ""
-    const allergies = serarchParams.get("allergies") || ""
+    const [searchParams, setSearchParams] = useSearchParams()
+    const type = searchParams.get("type") || ""
+    const allergies = searchParams.get("allergies") || ""
 
     const fetchMenu = async () => {
         try {
@@ -32,7 +32,7 @@ const Home = () => {
             const menu = await response.json()
             setDishes(menu)
         } catch (error) {
-            setError(err.response?.data?.message || "Failed to fetch the menu.")
+            setError(error.message || "Failed to fetch the menu.")
         } finally {
             setLoading(false)
         }
@@ -44,29 +44,31 @@ const Home = () => {
 
     const handleSelect = (selected) => {
         setSelectedProduct(selected)
-      }
+    }
 
     return (
         <>
-            <MenuLayout setSearchParams={setSearchParams} fetchMenu = {fetchMenu}/>
+            <MenuLayout setSearchParams={setSearchParams} fetchMenu={fetchMenu}/>
             <h1>Welcome to Plately 😺</h1>
+            
             {!error && loading && <FadeLoader />}
+            
             {error && <div>Failed to load dishes. Please try again.</div>}
-            {!error && !loading && dishes.length > 0 && (
-            dishes.map((dish) => (<Menu key={dish.id}{...dish}/>
-            ))
+            
+            {!error && !loading && dishes.length === 0 && (
+                <div>No dishes found. Try changing your filters.</div>
             )}
+            
             {!error && !loading && dishes.length > 0 && (
-            dishes.map((dish) => (
-                <Menu
-                key={dish.id}
-                {...dish}
-                selectedDish={selectedProduct}
-                handleSelect={handleSelect}
-                />
-            ))
-)}
-
+                dishes.map((dish) => (
+                    <Menu 
+                        key={dish.id} 
+                        {...dish} 
+                        selectedDish={selectedProduct} 
+                        handleSelect={handleSelect}
+                    />
+                ))
+            )}
         </>
     )
 }
