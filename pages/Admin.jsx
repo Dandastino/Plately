@@ -1,13 +1,14 @@
 import React, { useState } from 'react'
 import { Container, Nav } from 'react-bootstrap'
 import NewDishForm from "../components/NewDishForm"
+import ManageDishForm from "../components/ManageDishForm"
 
 const Admin = () => {
   const [activeTab, setActiveTab] = useState('newDish')
   
   return (
     <Container className="py-4">
-      <h1 className="mb-4">Restaurant Admin Panel</h1>
+      <h1 className="mb-4">Admin Pannel</h1>
       
       <Nav variant="tabs" className="mb-4">
         <Nav.Item>
@@ -29,7 +30,7 @@ const Admin = () => {
       </Nav>
       
       {activeTab === 'newDish' && <NewDishForm />}
-      {activeTab === 'manageDishes' && <p>Dish management interface will appear here</p>}
+      {activeTab === 'manageDishes' && <ManageDishForm />}
     </Container>
   )
 }

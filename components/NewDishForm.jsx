@@ -99,17 +99,9 @@ const NewDishForm = () => {
     <Container className="mt-4">
       <h2 className="mb-4">Add New Dish</h2>
       
-      {response && (
-        <Alert variant="success" dismissible onClose={() => setResponse(null)}>
-          Dish added successfully! ID: {response.id}
-        </Alert>
-      )}
+      {response && (<Alert variant="success" dismissible onClose={() => setResponse(null)}>Dish added successfully! ID: {response.id}</Alert>)}
       
-      {errors.form && (
-        <Alert variant="danger" dismissible onClose={() => setErrors({...errors, form: ""})}>
-          {errors.form}
-        </Alert>
-      )}
+      {errors.form && (<Alert variant="danger" dismissible onClose={() => setErrors({...errors, form: ""})}>{errors.form}</Alert>)}
       
       <Form onSubmit={handleSubmit}>
         <Row>
@@ -164,7 +156,7 @@ const NewDishForm = () => {
           
           <Col md={6}>
             <Form.Group className="mb-3">
-              <Form.Label htmlFor="price">Prezzo* (€)</Form.Label>
+              <Form.Label htmlFor="price">Price* (€)</Form.Label>
               <Form.Control id="price" type="number" step="0.10" placeholder="Dish Price" value={price} onChange={(event) => setPrice(event.target.value)} isInvalid={!!errors.price}/>
               <Form.Control.Feedback type="invalid"> {errors.price} </Form.Control.Feedback>
             </Form.Group>
