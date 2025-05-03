@@ -41,10 +41,11 @@ Plately is a modern and user-friendly restaurant menu application built with Rea
 
 ## 📦 Installation
 
-1. **Clone the repository:***
+1. **Clone the repository:**
    ```bash
    git clone https://github.com/Dandastino/Plately.git
-   cd Plately```
+   cd Plately
+   ```
 
 2. **Install dependencies:**
   ```bash
@@ -55,12 +56,6 @@ Plately is a modern and user-friendly restaurant menu application built with Rea
   ```bash
   npm run dev
   ```
-
-4. **Make sure your backend (PostgREST or Supabase) is running and accessible at:**
-  ```arduino
-  http://localhost:3000
-  ```
-
 
 ## 🐳 Backend Setup with Docker
 
@@ -91,5 +86,6 @@ docker-compose logs -f api
 
 Once running, the backend will be available at:
 
-```arduino
-http://localhost:3000```
+```bash
+http://localhost:3000
+```
