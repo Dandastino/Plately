@@ -8,7 +8,7 @@ const Admin = () => {
   
   return (
     <Container className="py-4">
-      <h1 className="mb-4">Admin Pannel</h1>
+      <h1 className="mb-4">Restaurant Admin Panel</h1>
       
       <Nav variant="tabs" className="mb-4">
         <Nav.Item>
