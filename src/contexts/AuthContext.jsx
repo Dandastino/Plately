@@ -24,7 +24,7 @@ export const AuthProvider = ({ children }) => {
               setIsAuthenticated(true)
             } else {
               try {
-                const response = await axios.get(`http://localhost:3000/users/${userId}`)
+                const response = await axios.get(`http://localhost:3000/users?id=eq.${userId}`)
                 if (response.data) {
                   const userData = {
                     id: response.data.id,
