@@ -1,25 +1,46 @@
 # 🍽️ Plately
 
-## 👨‍💻 Front End Project 
+## 👨‍💻 Project Overview
 
-Plately is a modern and user-friendly restaurant menu application built with React. It allows users to browse, filter, and interact with a digital menu. The app supports filtering by course and allergies, and includes a feature, for admins, to add new dishes.
+Plately is a modern and user-friendly restaurant menu application built with React. It allows customers to browse and order food and drinks independently without waiter assistance. The application features menu filtering for allergies and dietary preferences. Customers can add desired dishes to their cart and submit orders when ready.
+
+Administrators have additional capabilities to manage the menu, including adding new dishes, modifying existing ones, and removing items.
 
 ## 🚀 Features
 
-- Display a complete list of restaurant dishes
-- Filter by course (appetizer, first course, main course, pizza, side, drink)
-- Filter by allergy category (meat, fish, vegetarian, vegan, gluten-free, etc.)
+### Customer Features
+- Complete restaurant menu display
+- Course-based filtering (appetizers, first courses, main courses, pizza, sides, drinks)
+- Allergy and dietary preference filtering (meat, fish, vegetarian, vegan, gluten-free)
+- Shopping cart functionality
+- Order submission system
+- Real-time menu updates
+
+### Admin Features
+- Menu management dashboard
+- Add new dishes with detailed information
+- Modify existing menu items
+- Remove items from the menu
+- View order statistics
+
+### Technical Features
 - Smooth animations and loading indicators
-- Add new dishes via a dedicated form
-- Responsive design for desktop and mobile
-- Backend communication through RESTful API
+- Responsive design for all devices
+- RESTful API integration
+- Real-time updates
+- Secure authentication system
 
-## 🛠️ Tech Stack
+## 🛠️ Technologies
 
-- React + React Router
-- PostgREST / Supabase / PostgreSQL
-- Bootstrap + React Spinners
+### Frontend
+- React 
 - Custom CSS
+
+### Basuc Backend
+- PostgreSQL
+- PostgREST
+- Docker
+- RESTful API
 
 ## 📦 Installation
 
@@ -30,27 +51,27 @@ Plately is a modern and user-friendly restaurant menu application built with Rea
    ```
 
 2. **Install dependencies:**
-  ```bash
-  npm install
-  ```
+   ```bash
+   npm install
+   ```
 
 3. **Start the development server:**
-  ```bash
-  npm run dev
-  ```
+   ```bash
+   npm run dev
+   ```
 
 ## 🐳 Backend Setup with Docker
 
 Start the backend containers using Docker:
 
-**From the project’s root directory, run:**
+**From the project's root directory, run:**
 ```bash
 docker-compose up -d
 ```
 
 This will start two containers:
-- db: PostgreSQL database
-- api: PostgREST server exposing the RESTful API
+- `db`: PostgreSQL database
+- `api`: PostgREST server exposing the RESTful API
 
 ### ✅ Verify the backend is running:
 
@@ -64,10 +85,31 @@ docker-compose ps
 docker-compose logs -f api
 ```
 
-### 🌐 Use the backend in the frontend:
+### 🌐 Backend Access
 
 Once running, the backend will be available at:
-
-```bash
+```
 http://localhost:3000
 ```
+
+## 👥 User Access
+
+The application provides two types of user access:
+
+### Admin Access
+- Username: "admin"
+- Password: "admin"
+- Full access to menu management and order tracking
+
+### Customer Access
+- Username: "user"
+- Password: "user"
+- Access to menu browsing and ordering
+
+
+## 📱 Responsive Design
+
+The application is fully responsive and optimized for:
+- Desktop computers
+- Tablets
+- Mobile devices

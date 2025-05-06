@@ -7,6 +7,7 @@ export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null)
   const [loading, setLoading] = useState(true)
   const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [guestSetupCompleted, setGuestSetupCompleted] = useState(false)
 
   useEffect(() => {
     const checkAuthStatus = async () => {
@@ -22,6 +23,12 @@ export const AuthProvider = ({ children }) => {
               const userData = JSON.parse(storedUserData)
               setCurrentUser(userData)
               setIsAuthenticated(true)
+              
+              // Verifica se l'utente guest ha completato la configurazione
+              if (userData.role === 'guest') {
+                const setupCompleted = localStorage.getItem('guestSetupCompleted')
+                setGuestSetupCompleted(setupCompleted === 'true')
+              }
             } else {
               try {
                 const response = await axios.get(`http://localhost:3000/users?id=eq.${userId}`)
@@ -35,19 +42,25 @@ export const AuthProvider = ({ children }) => {
                   setCurrentUser(userData)
                   setIsAuthenticated(true)
                   localStorage.setItem('userData', JSON.stringify(userData))
+
+                  // Verifica se l'utente guest ha completato la configurazione
+                  if (userData.role === 'guest') {
+                    const setupCompleted = localStorage.getItem('guestSetupCompleted')
+                    setGuestSetupCompleted(setupCompleted === 'true')
+                  }
                 } else {
                   localStorage.removeItem('authToken')
                   localStorage.removeItem('userData')
                 }
               } catch (error) {
-                console.error("Error occure:", error)
+                console.error("Error occurred:", error)
                 localStorage.removeItem('authToken')
                 localStorage.removeItem('userData')
               }
             }
           }
         } catch (error) {
-          console.error("Errore during authentication:", error)
+          console.error("Error during authentication:", error)
           localStorage.removeItem('authToken')
           localStorage.removeItem('userData')
         }
@@ -80,6 +93,13 @@ export const AuthProvider = ({ children }) => {
         
         setCurrentUser(userWithoutPassword)
         setIsAuthenticated(true)
+
+        // Se l'utente è guest, verifica se ha completato la configurazione
+        if (userWithoutPassword.role === 'guest') {
+          const setupCompleted = localStorage.getItem('guestSetupCompleted')
+          setGuestSetupCompleted(setupCompleted === 'true')
+        }
+
         return { success: true, user: userWithoutPassword }
       } else {
         return { success: false, error: "Credential Error" }
@@ -93,11 +113,25 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     localStorage.removeItem('authToken')
     localStorage.removeItem('userData')
+    localStorage.removeItem('guestSetupCompleted')
     setCurrentUser(null)
     setIsAuthenticated(false)
+    setGuestSetupCompleted(false)
   }
 
-  const value = {currentUser, isAuthenticated, loading, login, logout
+  const completeGuestSetup = () => {
+    setGuestSetupCompleted(true)
+    localStorage.setItem('guestSetupCompleted', 'true')
+  }
+
+  const value = {
+    currentUser,
+    isAuthenticated,
+    loading,
+    login,
+    logout,
+    guestSetupCompleted,
+    completeGuestSetup
   }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
