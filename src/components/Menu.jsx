@@ -13,11 +13,7 @@ function Menu({ id, name, photo, prezzo, selectedDish, handleSelect }) {
       onClick={() => handleSelect({ id, name, photo, prezzo, description, allergies, type })}
       >
       <h2>{capitalize(name)}</h2>
-      <img 
-        src={photo || "/placeholder.jpg"} 
-        alt={name || "Menu item"} 
-        loading="lazy"
-      />
+      <img src={photo || "/placeholder.jpg"} alt={name || "Menu item"} loading="lazy"/>
       <p>Price: {prezzo}€</p>
 
       <div className="buttons">

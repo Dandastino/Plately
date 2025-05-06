@@ -1,229 +1,200 @@
-import React from 'react';
-import { Alert, Button, Form, Container, Row, Col, Table, Spinner } from "react-bootstrap";
-import { useState, useEffect } from "react";
+import React from 'react'
+import { Alert, Button, Form, Container, Row, Col, Table, Spinner } from "react-bootstrap"
+import { useState, useEffect } from "react"
 
 const ManageDishForm = () => {
     // Form state
-    const [name, setName] = useState("");
-    const [type, setType] = useState("appetizer");
-    const [photo, setPhoto] = useState("");
-    const [allergies, setAllergies] = useState("");
-    const [description, setDescription] = useState("");
-    const [price, setPrice] = useState("");
-    const [response, setResponse] = useState(null);
-    const [errors, setErrors] = useState({});
+    const [name, setName] = useState("")
+    const [type, setType] = useState("appetizer")
+    const [photo, setPhoto] = useState("")
+    const [allergies, setAllergies] = useState("")
+    const [description, setDescription] = useState("")
+    const [price, setPrice] = useState("")
+    const [response, setResponse] = useState(null)
+    const [errors, setErrors] = useState({})
     
-    // Dish management state
-    const [dishes, setDishes] = useState([]);
-    const [loading, setLoading] = useState(false);
-    const [editMode, setEditMode] = useState(false);
-    const [currentDishId, setCurrentDishId] = useState(null);
+    // Dish management 
+    const [dishes, setDishes] = useState([])
+    const [loading, setLoading] = useState(false)
+    const [editMode, setEditMode] = useState(false)
+    const [currentDishId, setCurrentDishId] = useState(null)
 
-    // API URL constant to avoid repetition
-    const API_BASE_URL = "http://localhost:3000";
+    const API_BASE_URL = "http://localhost:3000"
 
-    // Load all dishes when component mounts
+    // Load all dishes 
     useEffect(() => {
-        fetchDishes();
-    }, []);
+        fetchDishes()
+    }, [])
 
-    // Generic API request handler with error handling
+    // Generic API request handler
     const apiRequest = async (url, method = "GET", data = null) => {
         try {
             const options = {
                 method,
                 headers: data ? { "Content-Type": "application/json" } : undefined,
                 body: data ? JSON.stringify(data) : undefined
-            };
+            }
 
-            const response = await fetch(url, options);
+            const response = await fetch(url, options)
             
             if (!response.ok) {
-                // Try to get detailed error from response
-                let errorMessage = `Server responded with status: ${response.status}`;
+                let errorMessage = `Server responded with status: ${response.status}`
                 try {
-                    const errorData = await response.json();
-                    errorMessage = errorData.message || errorMessage;
+                    const errorData = await response.json()
+                    errorMessage = errorData.message || errorMessage
                 } catch (e) {
-                    // If response can't be parsed as JSON, use default error message
+                    throw(e)
                 }
-                throw new Error(errorMessage);
+                throw new Error(errorMessage)
             }
             
-            // For DELETE operations that may not return content
             if (method === "DELETE") {
-                return { success: true };
+                return { success: true }
             }
             
             try {
-                return await response.json();
+                return await response.json()
             } catch (e) {
-                // Return success response for endpoints that don't return JSON
-                return { success: true };
+                return { success: true }
             }
         } catch (error) {
-            throw error;
+            throw error
         }
-    };
+    }
 
-    // Function to fetch all dishes
+    // Fetch all dishes
     const fetchDishes = async () => {
-        setLoading(true);
+        setLoading(true)
         try {
-            const data = await apiRequest(`${API_BASE_URL}/dishes`);
-            setDishes(data);
+            const data = await apiRequest(`${API_BASE_URL}/dishes`)
+            setDishes(data)
         } catch (error) {
-            setErrors({ form: `Error fetching dishes: ${error.message}` });
+            setErrors({ form: `Error fetching dishes: ${error.message}` })
         } finally {
-            setLoading(false);
+            setLoading(false)
         }
-    };
+    }
 
-    // Function to fetch details of a specific dish
+    // Fetch details of a specific dish
     const fetchDishDetails = async (dishId) => {
-        setLoading(true);
+        setLoading(true)
         try {
-            const dishToEdit = dishes.find(dish => dish.id === dishId);
+            const dishToEdit = dishes.find(dish => dish.id === dishId)
             
             if (dishToEdit) {
-                populateForm(dishToEdit);
+                populateForm(dishToEdit)
             } else {
-                const results = await apiRequest(`${API_BASE_URL}/dishes?id=eq.${dishId}`);
-                const dishData = results[0]; // PostgREST returns an array
-                populateForm(dishData);
+                const results = await apiRequest(`${API_BASE_URL}/dishes?id=eq.${dishId}`)
+                const dishData = results[0]
+                populateForm(dishData)
             }
     
-            setEditMode(true);
-            setCurrentDishId(dishId);
+            setEditMode(true)
+            setCurrentDishId(dishId)
         } catch (error) {
-            setErrors({ form: `Error fetching dish: ${error.message}` });
+            setErrors({ form: `Error fetching dish: ${error.message}` })
         } finally {
-            setLoading(false);
+            setLoading(false)
         }
-    };
+    }
     
 
-    // Helper function to populate form with dish data
+    // Populate form with dish data
     const populateForm = (dishData) => {
-        setName(dishData.name || "");
-        setType(dishData.type || "appetizer");
-        setPhoto(dishData.photo || "");
-        setAllergies(dishData.allergies || "");
-        setDescription(dishData.description || "");
-        setPrice(dishData.prezzo?.toString() || "");
-    };
+        setName(dishData.name || "")
+        setType(dishData.type || "appetizer")
+        setPhoto(dishData.photo || "")
+        setAllergies(dishData.allergies || "")
+        setDescription(dishData.description || "")
+        setPrice(dishData.prezzo?.toString() || "")
+    }
 
-    // Function to delete a dish
+    // Delete a dish
     const deleteDish = async (dishId) => {
         if (!window.confirm("Are you sure you want to delete this dish?")) {
-            return;
+            return
         }
-        
-        setLoading(true);
-        try {
-            // Try the standard REST DELETE endpoint first
-            try {
-                await apiRequest(`${API_BASE_URL}/dishes?id=eq.${dishId}`, "DELETE");
+    
+        setLoading(true)
 
-            } catch (error) {
-                if (error.message.includes("404")) {
-                    // If DELETE fails with 404, try alternative endpoint
-                    await apiRequest(`${API_BASE_URL}/dishes/delete`, "POST", { id: dishId });
-                } else {
-                    throw error;
-                }
-            }
-            
-            // Update dish list after deletion
-            setResponse({ id: dishId, message: "Dish deleted successfully" });
-            fetchDishes();
+        try {
+            await apiRequest(`${API_BASE_URL}/dishes?id=eq.${dishId}`, "DELETE")
+            setResponse({ id: dishId, message: "Dish deleted successfully" })
+            fetchDishes()
         } catch (error) {
-            setErrors({ form: `Error deleting dish: ${error.message}` });
+            setErrors({ form: `Error deleting dish: ${error.message}` })
         } finally {
-            setLoading(false);
+            setLoading(false)
         }
-    };
+    }
 
-    const validateForm = () => {
-        let isValid = true;
-        const newErrors = {};
-    
-        if (!name.trim()) {
-            isValid = false;
-            newErrors.name = "Name is required";
-        }
-    
-        if (!type) {
-            isValid = false;
-            newErrors.type = "Course type is required";
-        }
-    
-        if (!price) {
-            isValid = false;
-            newErrors.price = "Price is required";
-        } else if (isNaN(parseFloat(price)) || parseFloat(price) < 0) {
-            isValid = false;
-            newErrors.price = "Please enter a valid price (must be positive)";
-        }
-    
-        setErrors(newErrors);
-        return isValid;
-    };
-
+    // Update the dish
     const handleSubmit = async (event) => {
-        event.preventDefault();
+        event.preventDefault()
     
-        if (!validateForm()) return;
+        if (!validateForm()) return
     
         try {
-            // Only handle edit mode since we removed the add functionality
-            // When updating, ALWAYS include the ID in the request body
             const dishData = {
-                id: currentDishId, // Include the ID for updates
-                name, 
+                id: currentDishId,name, 
                 type,
                 ...(photo && { photo }),
                 ...(allergies && { allergies }),
                 ...(description && { description }),
                 prezzo: price ? parseFloat(price) : 0,
-            };
+            }
             
-            // Use POST to /dishes for update instead of PUT
-            // Since PUT and /update endpoints don't work
-            await apiRequest(`${API_BASE_URL}/dishes?id=eq.${currentDishId}`, "PATCH", dishData);
+            await apiRequest(`${API_BASE_URL}/dishes?id=eq.${currentDishId}`, "PATCH", dishData)
             
-            setResponse({
-                id: currentDishId,
-                message: "Dish updated successfully"
-            });
+            setResponse({id: currentDishId, message: "Dish updated successfully"})  
+            setDishes(dishes.map(dish => dish.id === currentDishId ? {...dish, ...dishData} : dish))
             
-            // Important: Update the dish in the local dishes array as well
-            setDishes(dishes.map(dish => 
-                dish.id === currentDishId ? {...dish, ...dishData} : dish
-            ));
-            
-            // Reset form after successful update
-            resetForm();
-            
-            // Update dish list
-            fetchDishes();
+            resetForm()
+            fetchDishes()
         } catch (error) {
-            setErrors({ form: error.message });
+            setErrors({ form: error.message })
         }
-    };
+    }
 
-    // Function to reset form and exit edit mode
+    // Check if the required fields are filled
+    const validateForm = () => {
+        let isValid = true
+        const newErrors = {}
+    
+        if (!name.trim()) {
+            isValid = false
+            newErrors.name = "Name is required"
+        }
+    
+        if (!type) {
+            isValid = false
+            newErrors.type = "Course type is required"
+        }
+    
+        if (!price) {
+            isValid = false
+            newErrors.price = "Price is required"
+        } else if (isNaN(parseFloat(price)) || parseFloat(price) < 0) {
+            isValid = false
+            newErrors.price = "Please enter a valid price (must be positive)"
+        }
+    
+        setErrors(newErrors)
+        return isValid
+    }
+
+    // Reset after editing
     const resetForm = () => {
-        setName("");
-        setType("appetizer");
-        setPhoto("");
-        setAllergies("");
-        setDescription("");
-        setPrice("");
-        setErrors({});
-        setEditMode(false);
-        setCurrentDishId(null);
-    };
+        setName("")
+        setType("appetizer")
+        setPhoto("")
+        setAllergies("")
+        setDescription("")
+        setPrice("")
+        setErrors({})
+        setEditMode(false)
+        setCurrentDishId(null)
+    }
   
     return (
         <Container className="mt-4">
@@ -256,28 +227,12 @@ const ManageDishForm = () => {
                                     <td>{dish.prezzo?.toFixed(2)}</td>
                                     <td>{dish.allergies || "None specified"}</td>
                                     <td>
-                                        <Button 
-                                            variant="warning" 
-                                            size="sm" 
-                                            onClick={() => fetchDishDetails(dish.id)}
-                                            className="me-2"
-                                        >
-                                            Edit
-                                        </Button>
-                                        <Button 
-                                            variant="danger" 
-                                            size="sm" 
-                                            onClick={() => deleteDish(dish.id)}
-                                        >
-                                            Delete
-                                        </Button>
+                                        <Button variant="warning" size="sm" onClick={() => fetchDishDetails(dish.id)}className="me-2">Edit</Button>
+                                        <Button variant="danger" size="sm" onClick={() => deleteDish(dish.id)}>Delete</Button>
                                     </td>
-                                </tr>
-                            ))
+                                </tr>))
                         ) : (
-                            <tr>
-                                <td colSpan="5" className="text-center">No dishes available</td>
-                            </tr>
+                            <tr><td colSpan="5" className="text-center">No dishes available</td></tr>
                         )}
                     </tbody>
                 </Table>
@@ -355,12 +310,9 @@ const ManageDishForm = () => {
                     </Form>
                 </>
             ) : (
-                <Alert variant="info" className="mt-3">
-                    Select a dish from the table above to edit its details.
-                </Alert>
-            )}
-        </Container>
-    );
-};
+                <Alert variant="info" className="mt-3">Select a dish from the table above to edit its details.</Alert>
+            )}</Container>
+    )
+}
 
-export default ManageDishForm;
+export default ManageDishForm

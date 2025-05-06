@@ -61,12 +61,7 @@ const Home = () => {
             
             {!error && !loading && dishes.length > 0 && (
                 dishes.map((dish) => (
-                    <Menu 
-                        key={dish.id} 
-                        {...dish} 
-                        selectedDish={selectedProduct} 
-                        handleSelect={handleSelect}
-                    />
+                    <Menu key={dish.id} {...dish} selectedDish={selectedProduct} handleSelect={handleSelect}/>
                 ))
             )}
         </>

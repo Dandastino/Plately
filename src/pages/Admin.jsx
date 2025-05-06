@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Container, Nav } from 'react-bootstrap'
-import NewDishForm from "../components/NewDishForm"
-import ManageDishForm from "../components/ManageDishForm"
+import NewDishForm from '../components/NewDishForm'
+import ManageDishForm from '../components/ManageDishForm'
 
 const Admin = () => {
   const [activeTab, setActiveTab] = useState('newDish')

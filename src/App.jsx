@@ -3,16 +3,16 @@ import './App.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import { Route, Routes } from 'react-router'
-import NotFound from '../pages/NotFound'
+import NotFound from './pages/NotFound'
 import Layout from '../layout/Layout'
-import Home from '../pages/Home'
-import Login from '../pages/Login'
-import Admin from '../pages/Admin';
-import DishDetail from '../pages/DishDetail';
-import Guest from '../pages/Guest';
-import Cart from '../pages/Cart'
-import { AuthProvider } from '../contexts/AuthContext'
-import { ProtectedRoute, GuestRoute } from "../components/AuthRoutes";
+import Home from './pages/Home'
+import Login from './pages/Login'
+import Admin from './pages/Admin';
+import DishDetail from './pages/DishDetail';
+import Guest from './pages/Guest';
+import Cart from './pages/Cart'
+import { AuthProvider } from './contexts/AuthContext'
+import { ProtectedRoute, GuestRoute } from "./components/AuthRoutes";
 
 
 const App = () => {

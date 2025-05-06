@@ -1,6 +1,6 @@
-import { Navigate, Outlet } from "react-router";
-import { useAuth } from "../contexts/AuthContext";
-import { FadeLoader } from "react-spinners";
+import { Navigate, Outlet } from "react-router"
+import { useAuth } from "../contexts/AuthContext"
+import { FadeLoader } from "react-spinners"
 
 
 export const ProtectedRoute = () => {
@@ -10,7 +10,7 @@ export const ProtectedRoute = () => {
     return <div><FadeLoader /> </div>;
   }
   return isAuthenticated ? <Outlet /> : <Navigate to="/login" />;
-};
+}
 
 export const GuestRoute = () => {
   const { isAuthenticated, loading, currentUser } = useAuth();
@@ -27,4 +27,4 @@ export const GuestRoute = () => {
   }
 
   return <Outlet />;
-};
+}

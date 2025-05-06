@@ -20,24 +20,6 @@ Plately is a modern and user-friendly restaurant menu application built with Rea
 - PostgREST / Supabase / PostgreSQL
 - Bootstrap + React Spinners
 - Custom CSS
-- Optional: Lutris/Wine (for Linux gaming support, e.g., League of Legends)
-
-## 🚀 Features
-
-- Display a complete list of restaurant dishes
-- Filter by course (appetizer, first course, main course, pizza, side, drink)
-- Filter by allergy category (meat, fish, vegetarian, vegan, gluten-free, etc.)
-- Smooth animations and loading indicators
-- Add new dishes via a dedicated form
-- Responsive design for desktop and mobile
-- Backend communication through RESTful API
-
-## 🛠️ Tech Stack
-
-- React + React Router
-- PostgREST / Supabase / PostgreSQL
-- Bootstrap + React Spinners
-- Custom CSS
 
 ## 📦 Installation
 

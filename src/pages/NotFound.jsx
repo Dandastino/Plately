@@ -1,7 +1,6 @@
 import { useLocation, Link } from "react-router"
 import React from 'react'
 
-
 const NotFound = () => {
     const location = useLocation()
     return(
@@ -11,4 +10,5 @@ const NotFound = () => {
         </>
     )
 }
+
 export default NotFound
