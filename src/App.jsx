@@ -4,7 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 import { Route, Routes } from 'react-router'
 import NotFound from './pages/NotFound'
-import Layout from '../layout/Layout'
+import Layout from './layout/Layout'
 import Home from './pages/Home'
 import Login from './pages/Login'
 import Admin from './pages/Admin';

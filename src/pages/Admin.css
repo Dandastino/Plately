@@ -1,0 +1,85 @@
+.admin-container {
+  padding: 2rem;
+  margin-left: 280px; /* Larghezza del MenuLayout */
+  width: calc(100vw - 280px);
+  min-height: calc(100vh - 60px);
+  background-color: #f8f9fa;
+  box-sizing: border-box;
+}
+
+.admin-title {
+  font-size: 2.5rem;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #e9ecef;
+}
+
+/* Stile per le tab di navigazione */
+.admin-nav {
+  margin-bottom: 2rem;
+  border-bottom: none;
+}
+
+.admin-nav .nav-link {
+  color: #6c757d;
+  font-weight: 500;
+  padding: 1rem 1.5rem;
+  border: none;
+  border-radius: 8px 8px 0 0;
+  transition: all 0.3s ease;
+}
+
+.admin-nav .nav-link:hover {
+  color: #2c3e50;
+  background-color: #e9ecef;
+}
+
+.admin-nav .nav-link.active {
+  color: #2c3e50;
+  background-color: #fff;
+  border-bottom: 3px solid #2c3e50;
+}
+
+/* Stile per il contenuto delle tab */
+.tab-content {
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .admin-container {
+    margin-left: 240px;
+    width: calc(100vw - 240px);
+    padding: 1.5rem;
+  }
+
+  .admin-title {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .admin-container {
+    margin-left: 0;
+    width: 100vw;
+    padding: 1rem;
+  }
+
+  .admin-title {
+    font-size: 1.75rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .admin-nav .nav-link {
+    padding: 0.75rem 1rem;
+  }
+
+  .tab-content {
+    padding: 1rem;
+  }
+} 

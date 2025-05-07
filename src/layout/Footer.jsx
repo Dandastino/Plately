@@ -3,7 +3,7 @@ import './Footer.css'
 import React, { useState } from 'react'
 import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
-import { useAuth } from '../src/contexts/AuthContext'
+import { useAuth } from '../contexts/AuthContext'
 
 const Footer = ({ tableNumber, guests, onTableClose }) => {
   const navigate = useNavigate()

@@ -4,6 +4,7 @@ import { FadeLoader } from "react-spinners"
 import Menu from "../components/Menu"
 import React from 'react'
 import { useSearchParams } from "react-router"
+import './Home.css'
 
 const Home = () => {
     const [dishes, setDishes] = useState([]);
@@ -47,24 +48,32 @@ const Home = () => {
     }
 
     return (
-        <>
+        <div className="home-container">
             <MenuLayout setSearchParams={setSearchParams} fetchMenu={fetchMenu}/>
-            <h1>Welcome to Plately 😺</h1>
-            
-            {!error && loading && <FadeLoader />}
-            
-            {error && <div>Failed to load dishes. Please try again.</div>}
-            
-            {!error && !loading && dishes.length === 0 && (
-                <div>No dishes found. Try changing your filters.</div>
-            )}
-            
-            {!error && !loading && dishes.length > 0 && (
-                dishes.map((dish) => (
-                    <Menu key={dish.id} {...dish} selectedDish={selectedProduct} handleSelect={handleSelect}/>
-                ))
-            )}
-        </>
+            <main className="main-content">
+                <h1 className="welcome-title">Welcome to Plately 😺</h1>
+                
+                {!error && loading && (
+                    <div className="loading-container">
+                        <FadeLoader />
+                    </div>
+                )}
+                
+                {error && <div className="error-message">Failed to load dishes. Please try again.</div>}
+                
+                {!error && !loading && dishes.length === 0 && (
+                    <div className="no-dishes-message">No dishes found. Try changing your filters.</div>
+                )}
+                
+                {!error && !loading && dishes.length > 0 && (
+                    <div className="dishes-grid">
+                        {dishes.map((dish) => (
+                            <Menu key={dish.id} {...dish} selectedDish={selectedProduct} handleSelect={handleSelect}/>
+                        ))}
+                    </div>
+                )}
+            </main>
+        </div>
     )
 }
 

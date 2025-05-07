@@ -2,15 +2,16 @@ import React, { useState } from 'react'
 import { Container, Nav } from 'react-bootstrap'
 import NewDishForm from '../components/NewDishForm'
 import ManageDishForm from '../components/ManageDishForm'
+import './Admin.css'
 
 const Admin = () => {
   const [activeTab, setActiveTab] = useState('newDish')
   
   return (
-    <Container className="py-4">
-      <h1 className="mb-4">Restaurant Admin Panel</h1>
+    <div className="admin-container">
+      <h1 className="admin-title">Restaurant Admin Panel</h1>
       
-      <Nav variant="tabs" className="mb-4">
+      <Nav variant="tabs" className="admin-nav">
         <Nav.Item>
           <Nav.Link 
             active={activeTab === 'newDish'} 
@@ -29,9 +30,11 @@ const Admin = () => {
         </Nav.Item>
       </Nav>
       
-      {activeTab === 'newDish' && <NewDishForm />}
-      {activeTab === 'manageDishes' && <ManageDishForm />}
-    </Container>
+      <div className="tab-content">
+        {activeTab === 'newDish' && <NewDishForm />}
+        {activeTab === 'manageDishes' && <ManageDishForm />}
+      </div>
+    </div>
   )
 }
 
