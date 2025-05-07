@@ -14,7 +14,7 @@ body {
 .container {
   width: 100%;
   max-width: 1200px;
-  margin: 0 auto;
+  margin: 0 auto; 
   padding: 2rem 1rem;
   flex: 1;
 }
@@ -123,10 +123,31 @@ body {
 
 .footer {
   background-color: #f8f9fa;
+  font-size: 1.2rem;
+  position: fixed;
+  bottom: 0;
+  left: 0; 
+  right: 0; 
+  width: 100%;
+  z-index: 1000;
   padding: 1rem 0;
-  margin-top: auto;
+  margin: 0;
   text-align: center;
   border-top: 1px solid #dee2e6;
+}
+
+.footer-item {
+  cursor: pointer;
+  padding: 0.5rem;
+  transition: transform 0.2s ease;
+}
+
+.footer-item:hover {
+  transform: scale(1.1);
+}
+
+.content-wrapper {
+  padding-bottom: 70px;
 }
 
 :root {

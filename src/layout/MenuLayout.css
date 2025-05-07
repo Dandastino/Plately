@@ -1,11 +1,9 @@
-/* Layout principale */
 .menu-container {
     display: flex;
     background-color: #ffffff;
     position: relative;
 }
 
-/* Sidebar dei filtri */
 .filter-controls {
     width: 280px;
     min-height: 100%;
@@ -19,15 +17,13 @@
     z-index: 100;
 }
 
-/* Contenuto principale */
 .menu-content {
     flex: 1;
-    padding: 2rem;
+    padding: 0.5rem;
     background-color: #fafafa;
     min-height: calc(100vh - 60px);
 }
 
-/* Ogni gruppo di filtro */
 .filter-group {
     margin-bottom:1.5rem;
     position: relative;
@@ -47,14 +43,11 @@
     letter-spacing: 0.5px;
 }
 
-/* Checkbox container */
 .checkbox-group {
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
 }
 
-/* Checkbox personalizzato */
 .checkbox-item {
     display: flex;
     align-items: center;

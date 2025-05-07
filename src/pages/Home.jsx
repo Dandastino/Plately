@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import MenuLayout from "../components/MenuLayout"
+import MenuLayout from "../layout/MenuLayout"
 import { FadeLoader } from "react-spinners"
 import Menu from "../components/Menu"
 import React from 'react'

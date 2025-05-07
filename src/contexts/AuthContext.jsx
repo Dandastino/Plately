@@ -24,8 +24,7 @@ export const AuthProvider = ({ children }) => {
               setCurrentUser(userData)
               setIsAuthenticated(true)
               
-              // Verifica se l'utente guest ha completato la configurazione
-              if (userData.role === 'guest') {
+              if (userData.role === 'user') {
                 const setupCompleted = localStorage.getItem('guestSetupCompleted')
                 setGuestSetupCompleted(setupCompleted === 'true')
               }
@@ -43,8 +42,7 @@ export const AuthProvider = ({ children }) => {
                   setIsAuthenticated(true)
                   localStorage.setItem('userData', JSON.stringify(userData))
 
-                  // Verifica se l'utente guest ha completato la configurazione
-                  if (userData.role === 'guest') {
+                  if (userData.role === 'user') {
                     const setupCompleted = localStorage.getItem('guestSetupCompleted')
                     setGuestSetupCompleted(setupCompleted === 'true')
                   }
@@ -84,7 +82,7 @@ export const AuthProvider = ({ children }) => {
         const userWithoutPassword = {
           id: user.id,
           username: user.username,
-          role: user.role || 'guest' 
+          role: user.role || 'user' 
         }
         
         const fakeToken = `fake-token-${user.id}-${Date.now()}`
@@ -94,8 +92,7 @@ export const AuthProvider = ({ children }) => {
         setCurrentUser(userWithoutPassword)
         setIsAuthenticated(true)
 
-        // Se l'utente è guest, verifica se ha completato la configurazione
-        if (userWithoutPassword.role === 'guest') {
+        if (userWithoutPassword.role === 'user') {
           const setupCompleted = localStorage.getItem('guestSetupCompleted')
           setGuestSetupCompleted(setupCompleted === 'true')
         }
