@@ -5,10 +5,14 @@ import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
 import { useAuth } from '../contexts/AuthContext'
 
-const Footer = ({ tableNumber, guests, onTableClose }) => {
+const Footer = ({ onTableClose }) => {
   const navigate = useNavigate()
   const [showModal, setShowModal] = useState(false)
-  const {logout} = useAuth()
+  const { logout } = useAuth()
+
+  const tableNumber = localStorage.getItem("tableNumber")
+  const guests = localStorage.getItem("guestNumber")
+
   
   const handleCloseTable = () => {
     setShowModal(true)
@@ -24,12 +28,7 @@ const Footer = ({ tableNumber, guests, onTableClose }) => {
         onTableClose()
       }
 
-      tableNumber = null;
-      guests = null
-      localStorage.removeItem("tableNumber")
-      localStorage.removeItem("guests")
-      navigate("/")
-      
+      localStorage.clear();
     } catch (error) {
       console.error("Logout error:", error)
     } finally {
@@ -60,11 +59,7 @@ const Footer = ({ tableNumber, guests, onTableClose }) => {
           🛒 Cart
         </div>
 
-        <div 
-          className="footer-item close-table" 
-          title="Close Table" 
-          onClick={handleCloseTable}
-        >
+        <div  className="footer-item close-table"  title="Close Table" onClick={handleCloseTable}>
           💵 Ask for the Bill
         </div>
       </footer>

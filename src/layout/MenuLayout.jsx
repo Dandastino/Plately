@@ -1,38 +1,43 @@
-import { useCallback, useState } from 'react'
-import React from 'react'
-import './MenuLayout.css'
+import React, { useCallback, useEffect, useState } from 'react';
+import './MenuLayout.css';
 
 const MenuLayout = ({ children, setSearchParams }) => {
   const [selectedFilters, setSelectedFilters] = useState({
     course: [],
     allergies: []
-  })
+  });
 
   const handleFilterChange = useCallback((category, value) => {
     setSelectedFilters(prev => {
-      const newFilters = { ...prev }
-      const index = newFilters[category].indexOf(value)
-      
-      if (index === -1) {
-        newFilters[category] = [...newFilters[category], value]
+      const updated = { ...prev };
+      if (updated[category].includes(value)) {
+        updated[category] = updated[category].filter(v => v !== value);
       } else {
-        newFilters[category] = newFilters[category].filter(v => v !== value)
+        updated[category] = [...updated[category], value];
+      }
+      return updated;
+    });
+  }, []);
+
+  useEffect(() => {
+    setSearchParams(prevParams => {
+      const newParams = new URLSearchParams(prevParams);
+
+      if (selectedFilters.course.length > 0) {
+        newParams.set('course', selectedFilters.course.join(','));
+      } else {
+        newParams.delete('course');
       }
 
-      // Aggiorna i parametri URL
-      setSearchParams(prevParams => {
-        const newParams = new URLSearchParams(prevParams)
-        if (newFilters[category].length > 0) {
-          newParams.set(category, newFilters[category].join(','))
-        } else {
-          newParams.delete(category)
-        }
-        return newParams
-      })
+      if (selectedFilters.allergies.length > 0) {
+        newParams.set('allergies', selectedFilters.allergies.join(','));
+      } else {
+        newParams.delete('allergies');
+      }
 
-      return newFilters
-    })
-  }, [setSearchParams])
+      return newParams;
+    });
+  }, [selectedFilters, setSearchParams]);
 
   const filterOptions = {
     course: [
@@ -50,13 +55,13 @@ const MenuLayout = ({ children, setSearchParams }) => {
       { value: 'vegan', label: 'Vegan' },
       { value: 'gluten free', label: 'Gluten Free' }
     ]
-  }
+  };
 
   return (
     <div className="menu-container">
       <div className="filter-controls">
         <h2 className="section-title">Filter Menu</h2>
-        
+
         <div className="filter-group">
           <label>Course Type</label>
           <div className="checkbox-group">
@@ -91,18 +96,19 @@ const MenuLayout = ({ children, setSearchParams }) => {
 
         {(selectedFilters.course.length > 0 || selectedFilters.allergies.length > 0) && (
           <div className="active-filters">
-            {selectedFilters.course.map(filter => (
-              <div key={filter} className="active-filter">
-                {filterOptions.course.find(opt => opt.value === filter)?.label}
-                <button onClick={() => handleFilterChange('course', filter)}>×</button>
-              </div>
-            ))}
-            {selectedFilters.allergies.map(filter => (
-              <div key={filter} className="active-filter">
-                {filterOptions.allergies.find(opt => opt.value === filter)?.label}
-                <button onClick={() => handleFilterChange('allergies', filter)}>×</button>
-              </div>
-            ))}
+            {[...selectedFilters.course, ...selectedFilters.allergies].map(filter => {
+              const isCourse = selectedFilters.course.includes(filter);
+              const label = isCourse
+                ? filterOptions.course.find(opt => opt.value === filter)?.label
+                : filterOptions.allergies.find(opt => opt.value === filter)?.label;
+
+              return (
+                <div key={filter} className="active-filter">
+                  {label}
+                  <button onClick={() => handleFilterChange(isCourse ? 'course' : 'allergies', filter)}>×</button>
+                </div>
+              );
+            })}
           </div>
         )}
       </div>
@@ -111,7 +117,7 @@ const MenuLayout = ({ children, setSearchParams }) => {
         {children}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default MenuLayout
+export default MenuLayout;

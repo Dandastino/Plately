@@ -11,10 +11,8 @@ const Guest = () => {
     const navigate = useNavigate()
     const { currentUser, completeGuestSetup } = useAuth()
 
-    // Previene la navigazione se l'utente è guest e non ha completato la configurazione
     useEffect(() => {
         if (currentUser?.role === 'guest' && !localStorage.getItem('guestSetupCompleted')) {
-            // Rimuovi qualsiasi altro percorso dalla history
             window.history.pushState(null, '', '/guest')
         }
     }, [currentUser])
@@ -30,14 +28,11 @@ const Guest = () => {
         } else if (isNaN(numTable) || numTable <= 0) {
             setError("Please enter a valid table number")
         } else {
-            // Salva i dati nel localStorage
             localStorage.setItem('tableNumber', numTable.toString())
             localStorage.setItem('guestNumber', numGuests.toString())
             
-            // Marca la configurazione come completata
             completeGuestSetup()
             
-            // Naviga alla home
             navigate("/home")
         }
     }
@@ -53,41 +48,17 @@ const Guest = () => {
 
                     <Form.Group className="mb-3">
                         <Form.Label>Table Number</Form.Label>
-                        <Form.Control
-                            type="number"
-                            value={table}
-                            onChange={e => setTable(e.target.value)}
-                            placeholder="Enter your table number"
-                            min="1"
-                            required
-                        />
+                        <Form.Control type="number" value={table} onChange={e => setTable(e.target.value)} placeholder="Enter your table number" min="1" required/>
                     </Form.Group>
 
                     <Form.Group className="mb-3">
                         <Form.Label>Number of Guests</Form.Label>
-                        <Form.Control
-                            type="number"
-                            value={guest}
-                            onChange={e => setGuest(e.target.value)}
-                            placeholder="Enter number of guests"
-                            min="1"
-                            required
-                        />
+                        <Form.Control type="number" value={guest} onChange={e => setGuest(e.target.value)} placeholder="Enter number of guests" min="1" required />
                     </Form.Group>
 
-                    {error && (
-                        <div className="text-danger mb-3">
-                            {error}
-                        </div>
-                    )}
+                    {error && (<div className="text-danger mb-3"> {error} </div>)}
 
-                    <Button 
-                        variant="primary" 
-                        onClick={handleSubmit}
-                        className="w-100"
-                    >
-                        Continue
-                    </Button>
+                    <Button variant="primary" onClick={handleSubmit}className="w-100">Continue</Button>
                 </Card.Body>
             </Card>
         </Container>
