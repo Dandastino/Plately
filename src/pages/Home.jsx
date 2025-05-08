@@ -7,7 +7,7 @@ import { useSearchParams } from "react-router"
 import './Home.css'
 
 const Home = () => {
-    const [dishes, setDishes] = useState([]);
+    const [dishes, setDishes] = useState([])
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState("")
     const [selectedProduct, setSelectedProduct] = useState(null)
@@ -40,8 +40,8 @@ const Home = () => {
     }
     
     useEffect(() => {
-        fetchMenu();
-    }, [type, allergies]);
+        fetchMenu()
+    }, [type, allergies])
 
     const handleSelect = (selected) => {
         setSelectedProduct(selected)

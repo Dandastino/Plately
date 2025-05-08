@@ -16,7 +16,7 @@ const DishDetail = () => {
                 setLoading(true)
                 setError(null)
 
-                const response = await fetch(`http://localhost:3000/dishes?id=eq.${dishID}`);
+                const response = await fetch(`http://localhost:3000/dishes?id=eq.${dishID}`)
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`)
                 }
@@ -39,12 +39,12 @@ const DishDetail = () => {
         fetchDish()
     }, [dishID])
 
-    if (loading) return <div className="loading-container">Loading...</div>;
-    if (error) return <div className="error-message">Error: {error}</div>;
+    if (loading) return <div className="loading-container">Loading...</div>
+    if (error) return <div className="error-message">Error: {error}</div>
 
     const {name, photo, prezzo, description, allergies, type} = dish
     
-    const capitalize = (str) => str?.charAt(0)?.toUpperCase() + str?.slice(1) || ""; 
+    const capitalize = (str) => str?.charAt(0)?.toUpperCase() + str?.slice(1) || "" 
 
     return (
         <div className="dish-detail-container">

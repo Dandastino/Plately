@@ -1,46 +1,46 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import './MenuLayout.css';
+import React, { useCallback, useEffect, useState } from 'react'
+import './MenuLayout.css'
 
 const MenuLayout = ({ children, setSearchParams }) => {
   const [selectedFilters, setSelectedFilters] = useState({
-    course: [],
+    type: [],
     allergies: []
-  });
+  })
 
   const handleFilterChange = useCallback((category, value) => {
     setSelectedFilters(prev => {
-      const updated = { ...prev };
+      const updated = { ...prev }
       if (updated[category].includes(value)) {
-        updated[category] = updated[category].filter(v => v !== value);
+        updated[category] = updated[category].filter(v => v !== value)
       } else {
-        updated[category] = [...updated[category], value];
+        updated[category] = [...updated[category], value]
       }
-      return updated;
-    });
-  }, []);
+      return updated
+    })
+  }, [])
 
   useEffect(() => {
     setSearchParams(prevParams => {
-      const newParams = new URLSearchParams(prevParams);
+      const newParams = new URLSearchParams(prevParams)
 
-      if (selectedFilters.course.length > 0) {
-        newParams.set('course', selectedFilters.course.join(','));
+      if (selectedFilters.type.length > 0) {
+        newParams.set('type', selectedFilters.type.join(','))
       } else {
-        newParams.delete('course');
+        newParams.delete('type')
       }
 
       if (selectedFilters.allergies.length > 0) {
-        newParams.set('allergies', selectedFilters.allergies.join(','));
+        newParams.set('allergies', selectedFilters.allergies.join(','))
       } else {
-        newParams.delete('allergies');
+        newParams.delete('allergies')
       }
 
-      return newParams;
-    });
-  }, [selectedFilters, setSearchParams]);
+      return newParams
+    })
+  }, [selectedFilters, setSearchParams])
 
   const filterOptions = {
-    course: [
+    type: [
       { value: 'appetizer', label: 'Appetizer' },
       { value: 'primo', label: 'First Course' },
       { value: 'secondo', label: 'Second Course' },
@@ -55,7 +55,7 @@ const MenuLayout = ({ children, setSearchParams }) => {
       { value: 'vegan', label: 'Vegan' },
       { value: 'gluten free', label: 'Gluten Free' }
     ]
-  };
+  }
 
   return (
     <div className="menu-container">
@@ -65,12 +65,12 @@ const MenuLayout = ({ children, setSearchParams }) => {
         <div className="filter-group">
           <label>Course Type</label>
           <div className="checkbox-group">
-            {filterOptions.course.map(option => (
+            {filterOptions.type.map(option => (
               <label key={option.value} className="checkbox-item">
                 <input
                   type="checkbox"
-                  checked={selectedFilters.course.includes(option.value)}
-                  onChange={() => handleFilterChange('course', option.value)}
+                  checked={selectedFilters.type.includes(option.value)}
+                  onChange={() => handleFilterChange('type', option.value)}
                 />
                 <span>{option.label}</span>
               </label>
@@ -94,20 +94,20 @@ const MenuLayout = ({ children, setSearchParams }) => {
           </div>
         </div>
 
-        {(selectedFilters.course.length > 0 || selectedFilters.allergies.length > 0) && (
+        {(selectedFilters.type.length > 0 || selectedFilters.allergies.length > 0) && (
           <div className="active-filters">
-            {[...selectedFilters.course, ...selectedFilters.allergies].map(filter => {
-              const isCourse = selectedFilters.course.includes(filter);
-              const label = isCourse
-                ? filterOptions.course.find(opt => opt.value === filter)?.label
-                : filterOptions.allergies.find(opt => opt.value === filter)?.label;
+            {[...selectedFilters.type, ...selectedFilters.allergies].map(filter => {
+              const isType = selectedFilters.type.includes(filter)
+              const label = isType
+                ? filterOptions.type.find(opt => opt.value === filter)?.label
+                : filterOptions.allergies.find(opt => opt.value === filter)?.label
 
               return (
                 <div key={filter} className="active-filter">
                   {label}
-                  <button onClick={() => handleFilterChange(isCourse ? 'course' : 'allergies', filter)}>×</button>
+                  <button onClick={() => handleFilterChange(isType ? 'type' : 'allergies', filter)}>×</button>
                 </div>
-              );
+              )
             })}
           </div>
         )}
@@ -117,7 +117,7 @@ const MenuLayout = ({ children, setSearchParams }) => {
         {children}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default MenuLayout;
+export default MenuLayout

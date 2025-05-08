@@ -1,109 +1,103 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router';
-import axios from 'axios';
-import { useAuth } from '../contexts/AuthContext';
-import { Button, Card, Modal, ListGroup, Badge, Container, Row, Col } from 'react-bootstrap';
+import React, { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router'
+import axios from 'axios'
+import { useAuth } from '../contexts/AuthContext'
+import { Button, Card, Modal, ListGroup, Badge, Container, Row, Col } from 'react-bootstrap'
 
 const Cart = () => {
-    const [cartItems, setCartItems] = useState([]);
-    const [showModal, setShowModal] = useState(false);
-    const [totalPrice, setTotalPrice] = useState(0);
-    const { currentUser, isAuthenticated } = useAuth();
-    const navigate = useNavigate();
+    const [cartItems, setCartItems] = useState([])
+    const [showModal, setShowModal] = useState(false)
+    const [totalPrice, setTotalPrice] = useState(0)
+    const { currentUser, isAuthenticated } = useAuth()
+    const navigate = useNavigate()
 
     useEffect(() => {
         if (isAuthenticated && currentUser) {
-            fetchCartItems();
+            fetchCartItems()
         }
-    }, [isAuthenticated, currentUser]);
+    }, [isAuthenticated, currentUser])
 
     const fetchCartItems = async () => {
         try {
             // Prima otteniamo il cart_id dell'utente
-            const cartResponse = await axios.get(`http://localhost:3000/cart?user_id=eq.${currentUser.id}`);
+            const cartResponse = await axios.get(`http://localhost:3000/cart?user_id=eq.${currentUser.id}`)
             if (cartResponse.data.length === 0) {
-                setCartItems([]);
-                return;
+                setCartItems([])
+                return
             }
             
-            const cartId = cartResponse.data[0].id;
+            const cartId = cartResponse.data[0].id
             
             // Poi otteniamo gli items del carrello
-            const itemsResponse = await axios.get(`http://localhost:3000/cart_dish?cart_id=eq.${cartId}`);
+            const itemsResponse = await axios.get(`http://localhost:3000/cart_dish?cart_id=eq.${cartId}`)
             const itemsWithDetails = await Promise.all(
                 itemsResponse.data.map(async (item) => {
-                    const dishResponse = await axios.get(`http://localhost:3000/dishes?id=eq.${item.dish_id}`);
+                    const dishResponse = await axios.get(`http://localhost:3000/dishes?id=eq.${item.dish_id}`)
                     return {
                         ...item,
                         ...dishResponse.data[0]
-                    };
+                    }
                 })
-            );
-            setCartItems(itemsWithDetails);
-            calculateTotal(itemsWithDetails);
+            )
+            setCartItems(itemsWithDetails)
+            calculateTotal(itemsWithDetails)
         } catch (error) {
-            console.error('Error fetching cart items:', error);
+            console.error('Error fetching cart items:', error)
         }
-    };
+    }
 
     const calculateTotal = (items) => {
-        const total = items.reduce((sum, item) => sum + (item.prezzo * item.quantity), 0);
-        setTotalPrice(total);
-    };
+        const total = items.reduce((sum, item) => sum + (item.prezzo * item.quantity), 0)
+        setTotalPrice(total)
+    }
 
     const updateQuantity = async (dishId, newQuantity) => {
-        if (newQuantity < 1) return;
+        if (newQuantity < 1) return
         
         try {
-            const cartResponse = await axios.get(`http://localhost:3000/cart?user_id=eq.${currentUser.id}`);
-            if (cartResponse.data.length === 0) return;
+            const cartResponse = await axios.get(`http://localhost:3000/cart?user_id=eq.${currentUser.id}`)
+            if (cartResponse.data.length === 0) return
             
-            const cartId = cartResponse.data[0].id;
+            const cartId = cartResponse.data[0].id
             await axios.patch(`http://localhost:3000/cart_dish?cart_id=eq.${cartId}&dish_id=eq.${dishId}`, {
                 quantity: newQuantity
-            });
-            fetchCartItems();
+            })
+            fetchCartItems()
         } catch (error) {
-            console.error('Error updating quantity:', error);
+            console.error('Error updating quantity:', error)
         }
-    };
+    }
 
     const removeItem = async (dishId) => {
         try {
-            const cartResponse = await axios.get(`http://localhost:3000/cart?user_id=eq.${currentUser.id}`);
-            if (cartResponse.data.length === 0) return;
+            const cartResponse = await axios.get(`http://localhost:3000/cart?user_id=eq.${currentUser.id}`)
+            if (cartResponse.data.length === 0) return
             
-            const cartId = cartResponse.data[0].id;
-            await axios.delete(`http://localhost:3000/cart_dish?cart_id=eq.${cartId}&dish_id=eq.${dishId}`);
-            fetchCartItems();
+            const cartId = cartResponse.data[0].id
+            await axios.delete(`http://localhost:3000/cart_dish?cart_id=eq.${cartId}&dish_id=eq.${dishId}`)
+            fetchCartItems()
         } catch (error) {
-            console.error('Error removing item:', error);
+            console.error('Error removing item:', error)
         }
-    };
+    }
 
     const placeOrder = async () => {
         try {
-            const cartResponse = await axios.get(`http://localhost:3000/cart?user_id=eq.${currentUser.id}`);
-            if (cartResponse.data.length === 0) return;
+            const cartResponse = await axios.get(`http://localhost:3000/cart?user_id=eq.${currentUser.id}`)
+            if (cartResponse.data.length === 0) return
             
-            const cartId = cartResponse.data[0].id;
+            const cartId = cartResponse.data[0].id
             
-            await axios.post(`http://localhost:3000/orders`, {
-                user_id: currentUser.id,
-                cart_id: cartId,
-                items: cartItems,
-                total_price: totalPrice
-            });
+            // Elimina tutti gli elementi dal carrello
+            await axios.delete(`http://localhost:3000/cart_dish?cart_id=eq.${cartId}`)
             
-            setShowModal(true);
-            // Rimuoviamo solo gli items dal carrello, non il carrello stesso
-            await axios.delete(`http://localhost:3000/cart_dish?cart_id=eq.${cartId}`);
-            setCartItems([]);
-            setTotalPrice(0);
+            setShowModal(true)
+            setCartItems([])
+            setTotalPrice(0)
         } catch (error) {
-            console.error('Error placing order:', error);
+            console.error('Error placing order:', error)
         }
-    };
+    }
 
     if (!isAuthenticated) {
         return (
@@ -113,7 +107,7 @@ const Cart = () => {
                     Go to Login
                 </Button>
             </Container>
-        );
+        )
     }
 
     return (
@@ -122,7 +116,7 @@ const Cart = () => {
             {cartItems.length === 0 ? (
                 <div className="text-center">
                     <p>Your cart is empty</p>
-                    <Button variant="primary" onClick={() => navigate('/menu')}>
+                    <Button variant="primary" onClick={() => navigate('/Home')}>
                         Browse Menu
                     </Button>
                 </div>
@@ -216,15 +210,15 @@ const Cart = () => {
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="primary" onClick={() => {
-                        setShowModal(false);
-                        navigate('/menu');
+                        setShowModal(false)
+                        navigate('/Home')
                     }}>
                         Back to Menu
                     </Button>
                 </Modal.Footer>
             </Modal>
         </Container>
-    );
-};
+    )
+}
 
-export default Cart;
+export default Cart

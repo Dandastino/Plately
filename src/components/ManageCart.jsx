@@ -1,56 +1,56 @@
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { useAuth } from '../context/AuthContext';
-import { Button, Card, Modal, ListGroup, Badge } from 'react-bootstrap';
+import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+import axios from 'axios'
+import { useAuth } from '../context/AuthContext'
+import { Button, Card, Modal, ListGroup, Badge } from 'react-bootstrap'
 
 const ManageCart = () => {
-    const [cartItems, setCartItems] = useState([]);
-    const [showModal, setShowModal] = useState(false);
-    const [totalPrice, setTotalPrice] = useState(0);
-    const { user } = useAuth();
-    const navigate = useNavigate();
+    const [cartItems, setCartItems] = useState([])
+    const [showModal, setShowModal] = useState(false)
+    const [totalPrice, setTotalPrice] = useState(0)
+    const { user } = useAuth()
+    const navigate = useNavigate()
 
     useEffect(() => {ManageCart
-        fetchCartItems();
-    }, []);
+        fetchCartItems()
+    }, [])
 
     const fetchCartItems = async () => {
         try {
-            const response = await axios.get(`http://localhost:3000/cart?id=eq.${user.id}`);
-            setCartItems(response.data);
-            calculateTotal(response.data);
+            const response = await axios.get(`http://localhost:3000/cart?id=eq.${user.id}`)
+            setCartItems(response.data)
+            calculateTotal(response.data)
         } catch (error) {
-            console.error('Error fetching cart items:', error);
+            console.error('Error fetching cart items:', error)
         }
-    };
+    }
 
     const calculateTotal = (items) => {
-        const total = items.reduce((sum, item) => sum + (item.prezzo * item.quantity), 0);
-        setTotalPrice(total);
-    };
+        const total = items.reduce((sum, item) => sum + (item.prezzo * item.quantity), 0)
+        setTotalPrice(total)
+    }
 
     const updateQuantity = async (dishId, newQuantity) => {
-        if (newQuantity < 1) return;
+        if (newQuantity < 1) return
         
         try {
             await axios.put(`http://localhost:3000/cart?id=eq.${user.id}/dish?id=eq.${dishes.id}`, {
                 quantity: newQuantity
-            });
-            fetchCartItems();
+            })
+            fetchCartItems()
         } catch (error) {
-            console.error('Error updating quantity:', error);
+            console.error('Error updating quantity:', error)
         }
-    };
+    }
 
     const removeItem = async (dishId) => {
         try {
-            await axios.delete(`http://localhost:3000/cart?id=eq.${user.id}/dish?id=eq.${dishId}`);
-            fetchCartItems();
+            await axios.delete(`http://localhost:3000/cart?id=eq.${user.id}/dish?id=eq.${dishId}`)
+            fetchCartItems()
         } catch (error) {
-            console.error('Error removing item:', error);
+            console.error('Error removing item:', error)
         }
-    };
+    }
 
 
     // DA MODIFICARE
@@ -59,15 +59,15 @@ const ManageCart = () => {
             await axios.post(`http://localhost:3000/orders`, {
                 userId: user.id,
                 items: cartItems
-            });
-            setShowModal(true);
-            await axios.delete(`http://localhost:3000/cart/${user.id}`);
-            setCartItems([]);
-            setTotalPrice(0);
+            })
+            setShowModal(true)
+            await axios.delete(`http://localhost:3000/cart/${user.id}`)
+            setCartItems([])
+            setTotalPrice(0)
         } catch (error) {
-            console.error('Error placing order:', error);
+            console.error('Error placing order:', error)
         }
-    };
+    }
 
     return (
         <div className="container mt-4">
@@ -116,15 +116,15 @@ const ManageCart = () => {
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="primary" onClick={() => {
-                        setShowModal(false);
-                        navigate('/menu');
+                        setShowModal(false)
+                        navigate('/menu')
                     }}>
                         Back to Menu
                     </Button>
                 </Modal.Footer>
             </Modal>
         </div>
-    );
-};
+    )
+}
 
-export default ManageCart;
+export default ManageCart

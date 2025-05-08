@@ -1,37 +1,37 @@
-import { Navigate, Outlet } from "react-router";
-import { useAuth } from "../contexts/AuthContext";
-import { FadeLoader } from "react-spinners";
+import { Navigate, Outlet } from "react-router"
+import { useAuth } from "../contexts/AuthContext"
+import { FadeLoader } from "react-spinners"
 
 export const ProtectedRoute = ({ requiredRole }) => {
-  const { isAuthenticated, loading, currentUser } = useAuth();
+  const { isAuthenticated, loading, currentUser } = useAuth()
 
   if (loading) {
-    return <div style={{ display: 'flex', justifyContent: 'center', padding: '2rem' }}><FadeLoader /></div>;
+    return <div style={{ display: 'flex', justifyContent: 'center', padding: '2rem' }}><FadeLoader /></div>
   }
 
   if (!isAuthenticated) {
-    return <Navigate to="/login" />;
+    return <Navigate to="/login" />
   }
 
   if (requiredRole && currentUser?.role !== requiredRole) {
-    return <Navigate to="/Home" />;
+    return <Navigate to="/Home" />
   }
 
-  return <Outlet />;
-};
+  return <Outlet />
+}
 
 export const GuestRoute = () => {
-  const { isAuthenticated, loading, currentUser } = useAuth();
+  const { isAuthenticated, loading, currentUser } = useAuth()
 
   if (loading) {
-    return <div style={{ display: 'flex', justifyContent: 'center', padding: '2rem' }}><FadeLoader /></div>;
+    return <div style={{ display: 'flex', justifyContent: 'center', padding: '2rem' }}><FadeLoader /></div>
   }
 
   if (isAuthenticated) {
     return currentUser?.role === 'admin'
       ? <Navigate to="/admin" />
-      : <Navigate to="/guest" />;
+      : <Navigate to="/guest" />
   }
 
-  return <Outlet />;
-};
+  return <Outlet />
+}

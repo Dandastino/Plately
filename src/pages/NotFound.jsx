@@ -1,9 +1,9 @@
-import { useLocation, Link } from "react-router";
-import React from 'react';
-import './NotFound.css';
+import { useLocation, Link } from "react-router"
+import React from 'react'
+import './NotFound.css'
 
 const NotFound = () => {
-  const location = useLocation();
+  const location = useLocation()
 
   return (
     <div className="notfound-container">
@@ -15,7 +15,8 @@ const NotFound = () => {
         ⬅ Go to Home
       </Link>
     </div>
-  );
-};
+  )
+  
+}
 
-export default NotFound;
+export default NotFound

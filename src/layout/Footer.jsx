@@ -4,15 +4,27 @@ import React, { useState } from 'react'
 import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
 import { useAuth } from '../contexts/AuthContext'
+import axios from 'axios'
 
 const Footer = ({ onTableClose }) => {
   const navigate = useNavigate()
   const [showModal, setShowModal] = useState(false)
-  const { logout } = useAuth()
+  const { logout, currentUser } = useAuth()
 
   const tableNumber = localStorage.getItem("tableNumber")
   const guests = localStorage.getItem("guestNumber")
 
+  const clearCart = async () => {
+    try {
+      const cartResponse = await axios.get(`http://localhost:3000/cart?user_id=eq.${currentUser.id}`)
+      if (cartResponse.data.length > 0) {
+        const cartId = cartResponse.data[0].id
+        await axios.delete(`http://localhost:3000/cart_dish?cart_id=eq.${cartId}`)
+      }
+    } catch (error) {
+      console.error('Error clearing cart:', error)
+    }
+  }
   
   const handleCloseTable = () => {
     setShowModal(true)
@@ -22,13 +34,17 @@ const Footer = ({ onTableClose }) => {
     e.preventDefault()
     
     try {
-      await logout();
+      // Prima svuotiamo il carrello
+      await clearCart()
+      
+      // Poi facciamo logout
+      await logout()
       
       if (onTableClose) {
         onTableClose()
       }
 
-      localStorage.clear();
+      localStorage.clear()
     } catch (error) {
       console.error("Logout error:", error)
     } finally {
