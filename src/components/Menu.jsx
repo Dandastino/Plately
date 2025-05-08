@@ -95,15 +95,22 @@ function Menu({ id, name, photo, prezzo, description, allergies, type, selectedD
         </div>
       </div>
 
-      <ToastContainer position="bottom-end" className="p-3">
+      <ToastContainer position="top-center" className="p-3" style={{ zIndex: 9999 }}>
         <Toast
           bg={toastType}
           onClose={() => setToastVisible(false)}
           show={toastVisible}
           delay={3000}
           autohide
+          style={{
+            minWidth: '300px',
+            boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+            border: 'none'
+          }}
         >
-          <Toast.Body className="text-white">{toastMessage}</Toast.Body>
+          <Toast.Body className="text-white d-flex align-items-center justify-content-center" style={{ fontSize: '1.1rem', padding: '1rem' }}>
+            {toastMessage}
+          </Toast.Body>
         </Toast>
       </ToastContainer>
     </>

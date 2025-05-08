@@ -1,7 +1,7 @@
 .home-container {
   display: flex;
   min-height: 100vh;
-  width: 100vw;
+  width: 100%;
   position: relative;
   overflow-x: hidden;
 }
@@ -10,12 +10,13 @@
 .main-content {
   flex: 1;
   margin-left: 280px; /* Larghezza del MenuLayout */
-  padding: 2rem;
+  padding: 2rem 0rem 2rem 2rem;
   background-color: #f8f9fa;
   min-height: calc(100vh - 60px);
   overflow-y: auto;
-  width: calc(100vw - 280px); /* Larghezza viewport meno la larghezza del MenuLayout */
+  width: calc(100% - 280px);
   box-sizing: border-box;
+  padding-bottom: calc(2rem + 60px); /* Padding normale + altezza footer */
 }
 
 .welcome-title {
@@ -25,15 +26,17 @@
   margin-bottom: 2rem;
   text-align: center;
   animation: fadeIn 0.5s ease-in;
+  padding-right: 2rem;
 }
 
 .dishes-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 2rem;
   margin-top: 2rem;
   width: 100%;
   box-sizing: border-box;
+  padding: 0 2rem 0 0;
 }
 
 .loading-container {
@@ -85,17 +88,20 @@
 @media (max-width: 1024px) {
   .main-content {
     margin-left: 240px;
-    width: calc(100vw - 240px);
-    padding: 1.5rem;
+    width: calc(100% - 240px);
+    padding: 1.5rem 0 1.5rem 1.5rem;
+    padding-bottom: calc(1.5rem + 60px);
   }
 
   .welcome-title {
     font-size: 2rem;
+    padding-right: 1.5rem;
   }
 
   .dishes-grid {
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 1.5rem;
+    padding: 0 1.5rem 0 0;
   }
 }
 
@@ -103,21 +109,25 @@
   .home-container {
     flex-direction: column;
     padding-top: 60px;
+    padding-bottom: 60px;
   }
 
   .main-content {
     margin-left: 0;
-    width: 100vw;
+    width: 100%;
     padding: 1rem;
+    padding-bottom: calc(1rem + 60px);
   }
 
   .welcome-title {
     font-size: 1.75rem;
     margin-bottom: 1.5rem;
+    padding-right: 0;
   }
 
   .dishes-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 1rem;
+    padding: 0;
   }
 } 

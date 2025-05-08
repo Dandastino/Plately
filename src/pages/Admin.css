@@ -1,14 +1,11 @@
 .admin-container {
   padding: 2rem;
-  width: calc(100vw - 280px);
+  width: 100%;
   min-height: calc(100vh - 60px);
   background-color: #f8f9fa;
   box-sizing: border-box;
-  margin: 0 auto;
-  max-width: 1200px;
+  margin: 0;
   position: relative;
-  left: 50%;
-  transform: translateX(-50%);
 }
 
 .admin-title {
@@ -50,38 +47,188 @@
   padding: 2rem;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
 }
 
-/* Responsive Design */
+/* Stili per il form di NewDishForm */
+.tab-content form {
+  max-width: 100%;
+}
+
+.tab-content .form-group {
+  margin-bottom: 1rem;
+}
+
+.tab-content .form-label {
+  font-size: 0.9rem;
+  margin-bottom: 0.3rem;
+}
+
+.tab-content .form-control,
+.tab-content .form-select {
+  padding: 0.5rem 0.75rem;
+  font-size: 0.9rem;
+}
+
+.tab-content textarea.form-control {
+  min-height: 80px;
+}
+
+.tab-content h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Media Queries per Tablet (1024px e sotto) */
 @media (max-width: 1024px) {
   .admin-container {
-    width: calc(100vw - 240px);
     padding: 1.5rem;
-    max-width: 900px;
   }
 
   .admin-title {
     font-size: 2rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .tab-content {
+    max-width: 90%;
+    padding: 1.5rem;
+  }
+
+  .admin-nav .nav-link {
+    padding: 0.8rem 1.2rem;
+    font-size: 0.95rem;
   }
 }
 
+/* Media Queries per Tablet Piccolo (768px e sotto) */
 @media (max-width: 768px) {
   .admin-container {
-    width: 90vw; /* Ridotto per assicurare margini sui lati */
     padding: 1rem;
-    max-width: none;
   }
 
   .admin-title {
     font-size: 1.75rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .admin-nav {
     margin-bottom: 1.5rem;
   }
 
   .admin-nav .nav-link {
     padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  .tab-content {
+    padding: 1.25rem;
+  }
+
+  .tab-content h2 {
+    font-size: 1.3rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .tab-content .form-group {
+    margin-bottom: 0.75rem;
+  }
+}
+
+/* Media Queries per Mobile (480px e sotto) */
+@media (max-width: 480px) {
+  .admin-container {
+    padding: 0.75rem;
+  }
+
+  .admin-title {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+  }
+
+  .admin-nav {
+    margin-bottom: 1rem;
+    flex-direction: column;
+  }
+
+  .admin-nav .nav-link {
+    padding: 0.6rem 0.8rem;
+    font-size: 0.85rem;
+    text-align: center;
+    border-radius: 4px;
+    margin-bottom: 0.5rem;
   }
 
   .tab-content {
     padding: 1rem;
+    max-width: 100%;
+    border-radius: 4px;
+  }
+
+  .tab-content h2 {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+  }
+
+  .tab-content .form-label {
+    font-size: 0.85rem;
+  }
+
+  .tab-content .form-control,
+  .tab-content .form-select {
+    padding: 0.4rem 0.6rem;
+    font-size: 0.85rem;
+  }
+
+  .tab-content textarea.form-control {
+    min-height: 60px;
+  }
+
+  /* Aggiustamenti per i bottoni su mobile */
+  .tab-content .btn {
+    width: 100%;
+    margin-top: 0.5rem;
+  }
+
+  /* Aggiustamenti per le colonne su mobile */
+  .tab-content .row {
+    margin-left: -0.5rem;
+    margin-right: -0.5rem;
+  }
+
+  .tab-content .col-md-6 {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+}
+
+/* Media Queries per schermi molto piccoli (320px e sotto) */
+@media (max-width: 320px) {
+  .admin-container {
+    padding: 0.5rem;
+  }
+
+  .admin-title {
+    font-size: 1.3rem;
+  }
+
+  .tab-content {
+    padding: 0.75rem;
+  }
+
+  .tab-content h2 {
+    font-size: 1.1rem;
+  }
+
+  .tab-content .form-label {
+    font-size: 0.8rem;
+  }
+
+  .tab-content .form-control,
+  .tab-content .form-select {
+    font-size: 0.8rem;
   }
 }

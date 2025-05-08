@@ -8,6 +8,7 @@
     width: 280px;
     min-height: 100%;
     padding: 2rem 1.5rem;
+    padding-bottom: calc(2rem + 60px);
     background-color: #ffffff;
     border-right: 1px solid #e6e6e6;
     position: fixed;
@@ -152,6 +153,7 @@
         height: auto;
         border-right: none;
         border-bottom: 1px solid #e6e6e6;
+        padding-bottom: 2rem;
     }
 
     .menu-content {
