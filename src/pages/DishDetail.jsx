@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router"
 import React from 'react'
 import './DishDetail.css'
+import { Button } from "react-bootstrap"
 
 const DishDetail = () => {
     const navigate = useNavigate()
@@ -49,27 +50,24 @@ const DishDetail = () => {
     return (
         <div className="dish-detail-container">
             <div className="dish-header">
-                <img src={photo} alt={name} className="dish-image" />
+                <img src={photo} className="dish-image" />
                 <div className="dish-info">
-                    <h1 className="dish-title">{capitalize(name)}</h1>
-                    <p className="dish-price">{prezzo}€</p>
-                    <p className="dish-description">{description || "No ingredients found"}</p>
+                    <h1 >{capitalize(name)}</h1>
+                    <p >{prezzo}€</p>
+                    <p >{description || "No ingredients found"}</p>
                     <div className="dish-meta">
                         <div className="meta-item">
-                            <i className="fas fa-utensils"></i>
                             <span>Type: {allergies || "None"}</span>
                         </div>
                         <div className="meta-item">
-                            <i className="fas fa-list"></i>
                             <span>Course: {type || "Unknown"}</span>
                         </div>
                     </div>
                 </div>
             </div>
-            <button className="back-button" onClick={() => navigate(-1)}>
-                <i className="fas fa-arrow-left"></i>
+            <Button onClick={() => navigate(-1)}>
                 Go Back
-            </button>
+            </Button>
         </div>
     )
 }   

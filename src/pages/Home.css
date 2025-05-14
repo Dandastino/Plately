@@ -6,17 +6,16 @@
   overflow-x: hidden;
 }
 
-/* Stile per il contenuto principale */
 .main-content {
   flex: 1;
-  margin-left: 280px; /* Larghezza del MenuLayout */
+  margin-left: 280px;
   padding: 2rem 0rem 2rem 2rem;
   background-color: #f8f9fa;
   min-height: calc(100vh - 60px);
   overflow-y: auto;
   width: calc(100% - 280px);
   box-sizing: border-box;
-  padding-bottom: calc(2rem + 60px); /* Padding normale + altezza footer */
+  padding-bottom: calc(2rem + 60px);
 }
 
 .welcome-title {

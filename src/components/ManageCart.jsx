@@ -1,25 +1,50 @@
 import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
-import axios from 'axios'
-import { useAuth } from '../context/AuthContext'
-import { Button, Card, Modal, ListGroup, Badge } from 'react-bootstrap'
+import { useNavigate } from 'react-router'
+import { useAuth } from '../contexts/AuthContext'
+import { Button, Card, Modal, ListGroup, Badge, Container, Row, Col } from 'react-bootstrap'
 
 const ManageCart = () => {
     const [cartItems, setCartItems] = useState([])
     const [showModal, setShowModal] = useState(false)
     const [totalPrice, setTotalPrice] = useState(0)
-    const { user } = useAuth()
+    const { currentUser, isAuthenticated } = useAuth()
     const navigate = useNavigate()
 
-    useEffect(() => {ManageCart
-        fetchCartItems()
-    }, [])
+    useEffect(() => {
+        if (isAuthenticated && currentUser) {
+            fetchCartItems()
+        }
+    }, [isAuthenticated, currentUser])
 
     const fetchCartItems = async () => {
         try {
-            const response = await axios.get(`http://localhost:3000/cart?id=eq.${user.id}`)
-            setCartItems(response.data)
-            calculateTotal(response.data)
+            // Prima otteniamo il cart_id dell'utente
+            const cartResponse = await fetch(`http://localhost:3000/cart?user_id=eq.${currentUser.id}`)
+            const cartData = await cartResponse.json()
+            
+            if (cartData.length === 0) {
+                setCartItems([])
+                return
+            }
+            
+            const cartId = cartData[0].id
+            
+            // Poi otteniamo gli items del carrello
+            const itemsResponse = await fetch(`http://localhost:3000/cart_dish?cart_id=eq.${cartId}`)
+            const itemsData = await itemsResponse.json()
+            
+            const itemsWithDetails = await Promise.all(
+                itemsData.map(async (item) => {
+                    const dishResponse = await fetch(`http://localhost:3000/dishes?id=eq.${item.dish_id}`)
+                    const dishData = await dishResponse.json()
+                    return {
+                        ...item,
+                        ...dishData[0]
+                    }
+                })
+            )
+            setCartItems(itemsWithDetails)
+            calculateTotal(itemsWithDetails)
         } catch (error) {
             console.error('Error fetching cart items:', error)
         }
@@ -34,9 +59,23 @@ const ManageCart = () => {
         if (newQuantity < 1) return
         
         try {
-            await axios.put(`http://localhost:3000/cart?id=eq.${user.id}/dish?id=eq.${dishes.id}`, {
-                quantity: newQuantity
+            const cartResponse = await fetch(`http://localhost:3000/cart?user_id=eq.${currentUser.id}`)
+            const cartData = await cartResponse.json()
+            
+            if (cartData.length === 0) return
+            
+            const cartId = cartData[0].id
+            
+            await fetch(`http://localhost:3000/cart_dish?cart_id=eq.${cartId}&dish_id=eq.${dishId}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    quantity: newQuantity
+                })
             })
+            
             fetchCartItems()
         } catch (error) {
             console.error('Error updating quantity:', error)
@@ -45,23 +84,38 @@ const ManageCart = () => {
 
     const removeItem = async (dishId) => {
         try {
-            await axios.delete(`http://localhost:3000/cart?id=eq.${user.id}/dish?id=eq.${dishId}`)
+            const cartResponse = await fetch(`http://localhost:3000/cart?user_id=eq.${currentUser.id}`)
+            const cartData = await cartResponse.json()
+            
+            if (cartData.length === 0) return
+            
+            const cartId = cartData[0].id
+            
+            await fetch(`http://localhost:3000/cart_dish?cart_id=eq.${cartId}&dish_id=eq.${dishId}`, {
+                method: 'DELETE'
+            })
+            
             fetchCartItems()
         } catch (error) {
             console.error('Error removing item:', error)
         }
     }
 
-
-    // DA MODIFICARE
     const placeOrder = async () => {
         try {
-            await axios.post(`http://localhost:3000/orders`, {
-                userId: user.id,
-                items: cartItems
+            const cartResponse = await fetch(`http://localhost:3000/cart?user_id=eq.${currentUser.id}`)
+            const cartData = await cartResponse.json()
+            
+            if (cartData.length === 0) return
+            
+            const cartId = cartData[0].id
+            
+            // Elimina tutti gli elementi dal carrello
+            await fetch(`http://localhost:3000/cart_dish?cart_id=eq.${cartId}`, {
+                method: 'DELETE'
             })
+            
             setShowModal(true)
-            await axios.delete(`http://localhost:3000/cart/${user.id}`)
             setCartItems([])
             setTotalPrice(0)
         } catch (error) {
@@ -69,41 +123,105 @@ const ManageCart = () => {
         }
     }
 
+    if (!isAuthenticated) {
+        return (
+            <Container className="mt-5 text-center">
+                <h2>Please login to view your cart</h2>
+                <Button variant="primary" onClick={() => navigate('/login')}>
+                    Go to Login
+                </Button>
+            </Container>
+        )
+    }
+
     return (
-        <div className="container mt-4">
-            <h2>Your Cart</h2>
+        <Container className="mt-4">
+            <h2 className="text-center mb-4">Your Cart</h2>
             {cartItems.length === 0 ? (
-                <p>Your cart is empty</p>
+                <div className="text-center">
+                    <p>Your cart is empty</p>
+                    <Button variant="primary" onClick={() => navigate('/Home')}>
+                        Browse Menu
+                    </Button>
+                </div>
             ) : (
                 <>
-                    <ListGroup>
-                        {cartItems.map((item) => (
-                            <ListGroup.Item key={item.id} className="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <h5>{item.name}</h5>
-                                    <p className="mb-0">€{item.prezzo.toFixed(2)}</p>
-                                </div>
-                                <div className="d-flex align-items-center">
-                                    <Button variant="outline-secondary" size="sm" onClick={() => updateQuantity(item.id, item.quantity - 1)}>-</Button>
-
-                                    <Badge bg="secondary" className="mx-2">{item.quantity}</Badge>
-
-                                    <Button variant="outline-secondary" size="sm" onClick={() => updateQuantity(item.id, item.quantity + 1)}>+</Button>
-
-                                    <Button variant="danger" size="sm" className="ms-3" onClick={() => removeItem(item.id)}> Remove</Button>
-                                </div>
-                            </ListGroup.Item>
-                        ))}
-                    </ListGroup>
-
-                    <Card className="mt-3">
-                        <Card.Body>
-                            <h4>Total: €{totalPrice.toFixed(2)}</h4>
-                            <Button variant="success" onClick={placeOrder}>
-                                Place Order
-                            </Button>
-                        </Card.Body>
-                    </Card>
+                    <Row>
+                        <Col md={8}>
+                            <ListGroup>
+                                {cartItems.map((item) => (
+                                    <ListGroup.Item key={item.id} className="mb-3">
+                                        <Row className="align-items-center">
+                                            <Col md={2}>
+                                                <img 
+                                                    src={item.photo || "/placeholder.jpg"} 
+                                                    alt={item.name} 
+                                                    className="img-fluid rounded"
+                                                    style={{ maxHeight: '100px' }}
+                                                />
+                                            </Col>
+                                            <Col md={4}>
+                                                <h5>{item.name}</h5>
+                                                <p className="text-muted mb-0">{item.description}</p>
+                                            </Col>
+                                            <Col md={2}>
+                                                <p className="mb-0">€{item.prezzo.toFixed(2)}</p>
+                                            </Col>
+                                            <Col md={2}>
+                                                <div className="d-flex align-items-center">
+                                                    <Button
+                                                        variant="outline-secondary"
+                                                        size="sm"
+                                                        onClick={() => updateQuantity(item.dish_id, item.quantity - 1)}
+                                                    >
+                                                        -
+                                                    </Button>
+                                                    <Badge bg="secondary" className="mx-2">
+                                                        {item.quantity}
+                                                    </Badge>
+                                                    <Button
+                                                        variant="outline-secondary"
+                                                        size="sm"
+                                                        onClick={() => updateQuantity(item.dish_id, item.quantity + 1)}
+                                                    >
+                                                        +
+                                                    </Button>
+                                                </div>
+                                            </Col>
+                                            <Col md={2}>
+                                                <Button
+                                                    variant="danger"
+                                                    size="sm"
+                                                    onClick={() => removeItem(item.dish_id)}
+                                                >
+                                                    Remove
+                                                </Button>
+                                            </Col>
+                                        </Row>
+                                    </ListGroup.Item>
+                                ))}
+                            </ListGroup>
+                        </Col>
+                        <Col md={4}>
+                            <Card>
+                                <Card.Body>
+                                    <h4>Order Summary</h4>
+                                    <hr />
+                                    <div className="d-flex justify-content-between mb-3">
+                                        <span>Subtotal:</span>
+                                        <span>€{totalPrice.toFixed(2)}</span>
+                                    </div>
+                                    <Button 
+                                        variant="success" 
+                                        className="w-100"
+                                        onClick={placeOrder}
+                                    >
+                                        Place Order
+                                    </Button>
+                                </Card.Body>
+                            </Card>
+                        </Col>
+                    </Row>
                 </>
             )}
 
@@ -117,13 +235,13 @@ const ManageCart = () => {
                 <Modal.Footer>
                     <Button variant="primary" onClick={() => {
                         setShowModal(false)
-                        navigate('/menu')
+                        navigate('/Home')
                     }}>
                         Back to Menu
                     </Button>
                 </Modal.Footer>
             </Modal>
-        </div>
+        </Container>
     )
 }
 

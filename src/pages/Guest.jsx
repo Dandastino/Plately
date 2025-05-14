@@ -8,14 +8,9 @@ const Guest = () => {
     const [table, setTable] = useState("")
     const [guest, setGuest] = useState("")
     const [error, setError] = useState("") 
-    const navigate = useNavigate()
-    const { currentUser, completeGuestSetup } = useAuth()
+    const { currentUser} = useAuth()
 
-    useEffect(() => {
-        if (currentUser?.role === 'guest' && !localStorage.getItem('guestSetupCompleted')) {
-            window.history.pushState(null, '', '/guest')
-        }
-    }, [currentUser])
+    const navigate = useNavigate()
 
     const handleSubmit = e => {
         e.preventDefault()
@@ -30,9 +25,7 @@ const Guest = () => {
         } else {
             localStorage.setItem('tableNumber', numTable.toString())
             localStorage.setItem('guestNumber', numGuests.toString())
-            
-            completeGuestSetup()
-            
+                        
             navigate("/home")
         }
     }

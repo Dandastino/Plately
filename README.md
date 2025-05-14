@@ -64,25 +64,31 @@ Administrators have additional capabilities to manage the menu, including adding
 
 Start the backend containers using Docker:
 
+**Make sure you have docker on your device:**
+```bash
+docker --version
+```
+
 **From the project's root directory, run:**
 ```bash
-docker-compose up -d
+docker compose up -d
 ```
 
 This will start two containers:
 - `db`: PostgreSQL database
 - `api`: PostgREST server exposing the RESTful API
 
+
 ### ✅ Verify the backend is running:
 
 **Check the container status:**
 ```bash
-docker-compose ps
+docker compose ps
 ```
 
 **View backend logs:**
 ```bash
-docker-compose logs -f api
+docker compose logs -f api
 ```
 
 ### 🌐 Backend Access

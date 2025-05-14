@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Container, Nav } from 'react-bootstrap'
+import { Nav } from 'react-bootstrap'
 import NewDishForm from '../components/NewDishForm'
 import ManageDishForm from '../components/ManageDishForm'
 import './Admin.css'
@@ -13,18 +13,12 @@ const Admin = () => {
       
       <Nav variant="tabs" className="admin-nav">
         <Nav.Item>
-          <Nav.Link 
-            active={activeTab === 'newDish'} 
-            onClick={() => setActiveTab('newDish')}
-          >
+          <Nav.Link active={activeTab === 'newDish'} onClick={() => setActiveTab('newDish')}>
             Add New Dish
           </Nav.Link>
         </Nav.Item>
         <Nav.Item>
-          <Nav.Link 
-            active={activeTab === 'manageDishes'} 
-            onClick={() => setActiveTab('manageDishes')}
-          >
+          <Nav.Link active={activeTab === 'manageDishes'} onClick={() => setActiveTab('manageDishes')}>
             Manage Dishes
           </Nav.Link>
         </Nav.Item>

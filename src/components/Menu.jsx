@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
-import axios from 'axios'
 import { Link } from 'react-router'
 import { Toast, ToastContainer } from 'react-bootstrap'
-import { ShoppingCart } from 'lucide-react' 
+import { ShoppingCart } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
 import './Menu.css'
 
@@ -26,32 +25,47 @@ function Menu({ id, name, photo, prezzo, description, allergies, type, selectedD
     }
 
     try {
-      const cartResponse = await axios.get(`http://localhost:3000/cart?user_id=eq.${currentUser.id}`)
+      const cartRes = await fetch(`http://localhost:3000/cart?user_id=eq.${currentUser.id}`)
+      const cartData = await cartRes.json()
 
-      if (cartResponse.data.length === 0) {
+      if (cartData.length === 0) {
         setToastMessage('No active cart found')
         setToastType('danger')
         setToastVisible(true)
         return
       }
 
-      const cartId = cartResponse.data[0].id
+      const cartId = cartData[0].id
 
-      const existingItemResponse = await axios.get(
+      const existingItemRes = await fetch(
         `http://localhost:3000/cart_dish?cart_id=eq.${cartId}&dish_id=eq.${id}`
       )
+      const existingItemData = await existingItemRes.json()
 
-      if (existingItemResponse.data.length > 0) {
-        const currentQuantity = existingItemResponse.data[0].quantity
-        await axios.patch(
+      if (existingItemData.length > 0) {
+        const currentQuantity = existingItemData[0].quantity
+
+        await fetch(
           `http://localhost:3000/cart_dish?cart_id=eq.${cartId}&dish_id=eq.${id}`,
-          { quantity: currentQuantity + 1 }
+          {
+            method: 'PATCH',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ quantity: currentQuantity + 1 })
+          }
         )
       } else {
-        await axios.post('http://localhost:3000/cart_dish', {
-          cart_id: cartId,
-          dish_id: id,
-          quantity: 1
+        await fetch('http://localhost:3000/cart_dish', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            cart_id: cartId,
+            dish_id: id,
+            quantity: 1
+          })
         })
       }
 

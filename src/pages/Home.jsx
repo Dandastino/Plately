@@ -2,7 +2,6 @@ import { useEffect, useState } from "react"
 import MenuLayout from "../layout/MenuLayout"
 import { FadeLoader } from "react-spinners"
 import Menu from "../components/Menu"
-import React from 'react'
 import { useSearchParams } from "react-router"
 import './Home.css'
 
@@ -11,8 +10,8 @@ const Home = () => {
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState("")
     const [selectedProduct, setSelectedProduct] = useState(null)
-
     const [searchParams, setSearchParams] = useSearchParams()
+    
     const type = searchParams.get("type") || ""
     const allergies = searchParams.get("allergies") || ""
 
