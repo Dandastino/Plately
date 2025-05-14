@@ -21,7 +21,6 @@ Administrators have additional capabilities to manage the menu, including adding
 - Add new dishes with detailed information
 - Modify existing menu items
 - Remove items from the menu
-- View order statistics
 
 ### Technical Features
 - Smooth animations and loading indicators
@@ -35,8 +34,10 @@ Administrators have additional capabilities to manage the menu, including adding
 ### Frontend
 - React 
 - Custom CSS
+- Bootstrap
+- Redux
 
-### Basuc Backend
+### Basic Backend
 - PostgreSQL
 - PostgREST
 - Docker
