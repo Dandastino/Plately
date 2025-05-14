@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router'
-import { useAuth } from '../contexts/AuthContext'
+import { checkAuthStatus } from '../redux/AuthSlice'
 import { Button, Card, Modal, ListGroup, Badge, Container, Row, Col } from 'react-bootstrap'
 
 const ManageCart = () => {
     const [cartItems, setCartItems] = useState([])
     const [showModal, setShowModal] = useState(false)
     const [totalPrice, setTotalPrice] = useState(0)
-    const { currentUser, isAuthenticated } = useAuth()
+    const { currentUser, isAuthenticated } = checkAuthStatus()
     const navigate = useNavigate()
 
     useEffect(() => {

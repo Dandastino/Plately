@@ -11,13 +11,14 @@ import Admin from './pages/Admin'
 import DishDetail from './pages/DishDetail'
 import Guest from './pages/Guest'
 import Cart from './pages/Cart'
-import { AuthProvider } from './contexts/AuthContext'
+import { Provider } from 'react-redux'
 import { ProtectedRoute, GuestRoute } from "./components/AuthRoutes"
+import store from './redux/store'
 
 
 const App = () => {
   return (
-    <AuthProvider>
+    <Provider store={store}>
       <Routes>
         <Route element={<GuestRoute />}>
           <Route path='/login' element={<Login />} />
@@ -36,7 +37,7 @@ const App = () => {
         </Route>
         <Route path='*' element={<NotFound />} />
       </Routes>
-    </AuthProvider>
+    </Provider>
   )
 }
 

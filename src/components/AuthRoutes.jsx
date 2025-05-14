@@ -1,12 +1,16 @@
 import { Navigate, Outlet } from "react-router"
-import { useAuth } from "../contexts/AuthContext"
+import { useSelector } from "react-redux"
 import { FadeLoader } from "react-spinners"
 
 export const ProtectedRoute = ({ requiredRole }) => {
-  const { isAuthenticated, loading, currentUser } = useAuth()
+  const { isAuthenticated, loading, currentUser } = useSelector(state => state.auth)
 
   if (loading) {
-    return <div style={{ display: 'flex', justifyContent: 'center', padding: '2rem' }}><FadeLoader /></div>
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center', padding: '2rem' }}>
+        <FadeLoader />
+      </div>
+    )
   }
 
   if (!isAuthenticated) {
@@ -20,11 +24,16 @@ export const ProtectedRoute = ({ requiredRole }) => {
   return <Outlet />
 }
 
+
 export const GuestRoute = () => {
-  const { isAuthenticated, loading, currentUser } = useAuth()
+  const { isAuthenticated, loading, currentUser } = useSelector(state => state.auth)
 
   if (loading) {
-    return <div style={{ display: 'flex', justifyContent: 'center', padding: '2rem' }}><FadeLoader /></div>
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center', padding: '2rem' }}>
+        <FadeLoader />
+      </div>
+    )
   }
 
   if (isAuthenticated) {
@@ -32,6 +41,5 @@ export const GuestRoute = () => {
       ? <Navigate to="/admin" />
       : <Navigate to="/guest" />
   }
-
   return <Outlet />
 }

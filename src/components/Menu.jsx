@@ -1,13 +1,14 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router'
+import { useState } from 'react'
+import { Link } from 'react-router' 
 import { Toast, ToastContainer } from 'react-bootstrap'
 import { ShoppingCart } from 'lucide-react'
-import { useAuth } from '../contexts/AuthContext'
+import { useSelector } from 'react-redux' 
 import './Menu.css'
 
 function Menu({ id, name, photo, prezzo, description, allergies, type, selectedDish, handleSelect }) {
   const isSelected = id === (selectedDish && selectedDish.id)
-  const { currentUser, isAuthenticated } = useAuth()
+
+  const { currentUser, isAuthenticated } = useSelector(state => state.auth)
 
   const [toastMessage, setToastMessage] = useState('')
   const [toastVisible, setToastVisible] = useState(false)

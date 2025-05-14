@@ -1,22 +1,25 @@
 import { useNavigate } from 'react-router'
 import './Footer.css'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
-import { useAuth } from '../contexts/AuthContext'
+import { logout } from '../redux/AuthSlice'
+import { useDispatch, useSelector } from 'react-redux'
 import axios from 'axios'
 
 const Footer = ({ onTableClose }) => {
   const navigate = useNavigate()
+  const dispatch = useDispatch()
   const [showModal, setShowModal] = useState(false)
-  const { logout, currentUser } = useAuth()
+
+  const currentUser = useSelector(state => state.auth.currentUser)
 
   const tableNumber = localStorage.getItem("tableNumber")
   const guests = localStorage.getItem("guestNumber")
 
   const clearCart = async () => {
     try {
-      const cartResponse = await axios.get(`http://localhost:3000/cart?user_id=eq.${currentUser.id}`)
+      const cartResponse = await axios.get(`http://localhost:3000/cart?user_id=eq.${currentUser?.id}`)
       if (cartResponse.data.length > 0) {
         const cartId = cartResponse.data[0].id
         await axios.delete(`http://localhost:3000/cart_dish?cart_id=eq.${cartId}`)
@@ -25,26 +28,24 @@ const Footer = ({ onTableClose }) => {
       console.error('Error clearing cart:', error)
     }
   }
-  
+
   const handleCloseTable = () => {
     setShowModal(true)
   }
 
   const confirmCloseTable = async (e) => {
     e.preventDefault()
-    
+
     try {
-      // Prima svuotiamo il carrello
       await clearCart()
-      
-      // Poi facciamo logout
-      await logout()
-      
+      dispatch(logout())
+
       if (onTableClose) {
         onTableClose()
       }
 
       localStorage.clear()
+      navigate("/login") // puoi anche reindirizzare dopo il logout
     } catch (error) {
       console.error("Logout error:", error)
     } finally {
@@ -64,7 +65,7 @@ const Footer = ({ onTableClose }) => {
         </div>
 
         <div className="footer-item" title="Guests">
-          👥 {guests ? `${guests} Guest${guests !== 1 ? 's' : ''}` : "?"}
+          👥 {guests ? `${guests} Guest${guests !== "1" ? 's' : ''}` : "?"}
         </div>
 
         <div className="footer-item" title="Admin Panel" onClick={() => navigate("/admin")}>
@@ -75,7 +76,7 @@ const Footer = ({ onTableClose }) => {
           🛒 Cart
         </div>
 
-        <div  className="footer-item close-table"  title="Close Table" onClick={handleCloseTable}>
+        <div className="footer-item close-table" title="Close Table" onClick={handleCloseTable}>
           💵 Ask for the Bill
         </div>
       </footer>
