@@ -1,122 +1,76 @@
-# 🍽️ Plately
+# 🍽️ Plately - Restaurant Menu App
 
-## 👨‍💻 Project Overview
+Welcome to Plately! This application allows customers to browse a restaurant menu, filter by preferences, and place orders. Administrators can manage the menu items.
 
-Plately is a modern and user-friendly restaurant menu application built with React. It allows customers to browse and order food and drinks independently without waiter assistance. The application features menu filtering for allergies and dietary preferences. Customers can add desired dishes to their cart and submit orders when ready.
+## ✨ Features
 
-Administrators have additional capabilities to manage the menu, including adding new dishes, modifying existing ones, and removing items.
+*   **For Customers:** View menu, filter dishes (by course, allergies), add to cart, submit orders.
+*   **For Admins:** Manage menu (add, edit, remove dishes).
+*   **Technical:** Responsive design, RESTful API, user authentication.
 
-## 🚀 Features
+## 🛠️ Tech Stack
 
-### Customer Features
-- Complete restaurant menu display
-- Course-based filtering (appetizers, first courses, main courses, pizza, sides, drinks)
-- Allergy and dietary preference filtering (meat, fish, vegetarian, vegan, gluten-free)
-- Shopping cart functionality
-- Order submission system
-- Real-time menu updates
+*   **Frontend:** React, Redux, Bootstrap, Custom CSS
+*   **Backend:** Node.js, Express
+*   **Database:** PostgreSQL (managed with Docker)
+*   **API Layer:** PostgREST, Custom Express API (`server.js`)
+*   **Containerization:** Docker, Docker Compose
 
-### Admin Features
-- Menu management dashboard
-- Add new dishes with detailed information
-- Modify existing menu items
-- Remove items from the menu
+## 📦 Prerequisites
 
-### Technical Features
-- Smooth animations and loading indicators
-- Responsive design for all devices
-- RESTful API integration
-- Real-time updates
-- Secure authentication system
+Before you start, ensure you have these installed:
 
-## 🛠️ Technologies
+1.  [Node.js](https://nodejs.org/)
+2.  [Docker Desktop](https://www.docker.com/products/docker-desktop/) 
+3.  [Git](https://git-scm.com/)
 
-### Frontend
-- React 
-- Custom CSS
-- Bootstrap
-- Redux
+## 🚀 Quick Start Guide
 
-### Basic Backend
-- PostgreSQL
-- PostgREST
-- Docker
-- RESTful API
+Follow these steps to get Plately up and running on your local machine:
 
-## 📦 Installation
+1.  **Clone the Repository:**
+    Open your terminal and run:
+    ```bash
+    git clone https://github.com/Dandastino/Plately.git
+    cd Plately
+    ```
 
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/Dandastino/Plately.git
-   cd Plately
-   ```
+2.  **Create Environment File:**
+    The application uses an environment file for configuration. Copy the example file to create your own:
+    ```bash
+    cp .env.example .env
+    ```
 
-2. **Install dependencies:**
-   ```bash
-   npm install
-   ```
+3.  **Install Frontend Dependencies:**
+    This installs all the necessary packages for the React application.
+    ```bash
+    npm install
+    ```
 
-3. **Start the development server:**
-   ```bash
-   npm run dev
-   ```
+4.  **Start Docker Services (Database & PostgREST API):**
+    In your terminal, from the project root, run:
+    ```bash
+    docker compose up -d
+    ```
 
-## 🐳 Backend Setup with Docker
+5.  **Start the Backend Application Server (Node.js):**
+    Open a **new terminal window/tab** in the project root and run:
+    ```bash
+    node server.js
+    ```
 
-Start the backend containers using Docker:
+6.  **Start the Frontend Development Server (React):**
+    Open another **new terminal window/tab** in the project root and run:
+    ```bash
+    npm run dev
+    ```
+## 👤 Default User Accounts
 
-**Make sure you have docker on your device:**
-```bash
-docker --version
-```
+*   **Admin:**
+    *   Username: `admin`
+    *   Password: `admin`
+*   **Customer:**
+    *   Username: `user`
+    *   Password: `user`
 
-**From the project's root directory, run:**
-```bash
-docker compose up -d
-```
-
-This will start two containers:
-- `db`: PostgreSQL database
-- `api`: PostgREST server exposing the RESTful API
-
-
-### ✅ Verify the backend is running:
-
-**Check the container status:**
-```bash
-docker compose ps
-```
-
-**View backend logs:**
-```bash
-docker compose logs -f api
-```
-
-### 🌐 Backend Access
-
-Once running, the backend will be available at:
-```
-http://localhost:3000
-```
-
-## 👥 User Access
-
-The application provides two types of user access:
-
-### Admin Access
-- Username: "admin"
-- Password: "admin"
-- Full access to menu management and order tracking
-
-### Customer Access
-- Username: "user"
-- Password: "user"
-- Access to menu browsing and ordering
-
-
-## 📱 Responsive Design
-
-The application is fully responsive and optimized for:
-- Desktop computers
-- Tablets
-- Mobile devices
+Enjoy using Plately!
