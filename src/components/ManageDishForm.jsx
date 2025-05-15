@@ -1,5 +1,5 @@
 import React from 'react'
-import { Alert, Button, Form, Container, Row, Col, Table, Spinner } from "react-bootstrap"
+import { Alert, Button, Form, Container, Row, Col, Table, Spinner, Modal } from "react-bootstrap"
 import { useState, useEffect } from "react"
 
 const ManageDishForm = () => {
@@ -18,6 +18,10 @@ const ManageDishForm = () => {
     const [loading, setLoading] = useState(false)
     const [editMode, setEditMode] = useState(false)
     const [currentDishId, setCurrentDishId] = useState(null)
+
+    // State per il modale di conferma eliminazione
+    const [showDeleteConfirmModal, setShowDeleteConfirmModal] = useState(false);
+    const [dishToDelete, setDishToDelete] = useState(null);
 
     const API_BASE_URL = "http://localhost:3000"
 
@@ -109,23 +113,34 @@ const ManageDishForm = () => {
         setPrice(dishData.prezzo?.toString() || "")
     }
 
-    // Delete a dish
-    const deleteDish = async (dishId) => {
-        if (!window.confirm("Are you sure you want to delete this dish?")) {
-            return
-        }
+    // delete confirm
+    const handleDeleteClick = (dishId) => {
+        setDishToDelete(dishId);
+        setShowDeleteConfirmModal(true);
+    };
+
+    const confirmDeleteDish = async () => {
+        if (!dishToDelete) return;
     
-        setLoading(true)
+        setLoading(true);
+        setShowDeleteConfirmModal(false); 
 
         try {
-            await apiRequest(`${API_BASE_URL}/dishes?id=eq.${dishId}`, "DELETE")
-            setResponse({ id: dishId, message: "Dish deleted successfully" })
-            fetchDishes()
+            await apiRequest(`${API_BASE_URL}/dishes?id=eq.${dishToDelete}`, "DELETE");
+            setResponse({ id: dishToDelete, message: "Dish deleted successfully" });
+            setDishToDelete(null); 
+            fetchDishes(); 
         } catch (error) {
-            setErrors({ form: `Error deleting dish: ${error.message}` })
+            setErrors({ form: `Error deleting dish: ${error.message}` });
+            setDishToDelete(null); 
         } finally {
-            setLoading(false)
+            setLoading(false);
         }
+    };
+
+    // delete dish
+    const deleteDish = async (dishId) => {
+        handleDeleteClick(dishId);
     }
 
     // Update the dish
@@ -311,7 +326,25 @@ const ManageDishForm = () => {
                 </>
             ) : (
                 <Alert variant="info" className="mt-3">Select a dish from the table above to edit its details.</Alert>
-            )}</Container>
+            )}
+
+            <Modal show={showDeleteConfirmModal} onHide={() => setShowDeleteConfirmModal(false)} centered>
+                <Modal.Header closeButton>
+                    <Modal.Title>Confirm Deletion</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    Are you sure you want to delete this dish? This action cannot be undone.
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => setShowDeleteConfirmModal(false)}>
+                        Cancel
+                    </Button>
+                    <Button variant="danger" onClick={confirmDeleteDish} disabled={loading}>
+                        {loading ? <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" /> : 'Delete'}
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+        </Container>
     )
 }
 

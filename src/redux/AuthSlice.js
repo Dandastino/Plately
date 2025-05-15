@@ -4,76 +4,85 @@ const initialState = {
   currentUser: null,
   isAuthenticated: false,
   loading: true,
-  guestSetupCompleted: false
+  guestSetupCompleted: false,
+  error: null
 }
 
-export const checkAuthStatus = createAsyncThunk('auth/checkStatus', async (_, { rejectWithValue }) => {
-  const token = localStorage.getItem('authToken')
-  const storedUserData = localStorage.getItem('userData')
+export const checkAuthStatus = createAsyncThunk(
+  'auth/checkStatus',
+  async (_, { rejectWithValue }) => {
+    const token = localStorage.getItem('authToken')
+    const storedUserData = localStorage.getItem('userData')
 
-  if (!token) return rejectWithValue('No token found')
+    if (!token) return rejectWithValue('No token found')
 
-  try {
-    const userId = token.split('-')[2]
-    let userData = storedUserData ? JSON.parse(storedUserData) : null
+    try {
+      const userId = token.split('-')[2]
+      let userData = storedUserData ? JSON.parse(storedUserData) : null
 
-    if (!userData && userId) {
-      const res = await fetch(`http://localhost:3000/users?id=eq.${userId}`)
-      const data = await res.json()
+      if (!userData && userId) {
+        const res = await fetch(`http://localhost:3000/users?id=eq.${userId}`)
+        if (!res.ok) throw new Error('Network response was not ok')
+        
+        const data = await res.json()
 
-      if (data && data.length > 0) {
-        userData = {
-          id: data[0].id,
-          username: data[0].username,
-          role: data[0].role
+        if (data && data.length > 0) {
+          userData = {
+            id: data[0].id,
+            username: data[0].username,
+            role: data[0].role
+          }
+          localStorage.setItem('userData', JSON.stringify(userData))
         }
-        localStorage.setItem('userData', JSON.stringify(userData))
       }
-    }
 
-    if (userData) {
-      return {
-        currentUser: userData,
-        guestSetupCompleted: localStorage.getItem('guestSetupCompleted') === 'true'
+      if (userData) {
+        return {
+          currentUser: userData,
+          guestSetupCompleted: localStorage.getItem('guestSetupCompleted') === 'true'
+        }
       }
-    } else {
       throw new Error('No user data found')
+    } catch (error) {
+      localStorage.removeItem('authToken')
+      localStorage.removeItem('userData')
+      return rejectWithValue(error.message)
     }
-  } catch (error) {
-    return rejectWithValue(error.message)
   }
-})
+)
 
-// Thunk per login
-export const login = createAsyncThunk('auth/login', async ({ username, password }, { rejectWithValue }) => {
-  try {
-    const res = await fetch('http://localhost:3000/users')
-    const data = await res.json()
+export const login = createAsyncThunk(
+  'auth/login',
+  async ({ username, password }, { rejectWithValue }) => {
+    try {
+      const res = await fetch('http://localhost:3000/users')
+      if (!res.ok) throw new Error('Network response was not ok')
+      
+      const data = await res.json()
+      const user = data.find(u => u.username.toLowerCase() === username.toLowerCase())
 
-    const user = data.find(u => u.username.toLowerCase() === username.toLowerCase())
+      if (user && user.password === password) {
+        const userData = {
+          id: user.id,
+          username: user.username,
+          role: user.role || 'user'
+        }
 
-    if (user && user.password === password) {
-      const userData = {
-        id: user.id,
-        username: user.username,
-        role: user.role || 'user'
+        const fakeToken = `fake-token-${user.id}-${Date.now()}`
+        localStorage.setItem('authToken', fakeToken)
+        localStorage.setItem('userData', JSON.stringify(userData))
+
+        return {
+          currentUser: userData,
+          guestSetupCompleted: localStorage.getItem('guestSetupCompleted') === 'true'
+        }
       }
-
-      const fakeToken = `fake-token-${user.id}-${Date.now()}`
-      localStorage.setItem('authToken', fakeToken)
-      localStorage.setItem('userData', JSON.stringify(userData))
-
-      return {
-        currentUser: userData,
-        guestSetupCompleted: localStorage.getItem('guestSetupCompleted') === 'true'
-      }
+      return rejectWithValue('Invalid credentials')
+    } catch (error) {
+      return rejectWithValue(error.message)
     }
-
-    return rejectWithValue('Credential Error')
-  } catch (error) {
-    return rejectWithValue('Login failed. Please try again.')
   }
-})
+)
 
 const authSlice = createSlice({
   name: 'auth',
@@ -83,40 +92,61 @@ const authSlice = createSlice({
       localStorage.removeItem('authToken')
       localStorage.removeItem('userData')
       localStorage.removeItem('guestSetupCompleted')
-      return { ...initialState, loading: false }
+      state.currentUser = null
+      state.isAuthenticated = false
+      state.loading = false
+      state.guestSetupCompleted = false
+      state.error = null
     },
     completeGuestSetup(state) {
       localStorage.setItem('guestSetupCompleted', 'true')
       state.guestSetupCompleted = true
+    },
+    clearError(state) {
+      state.error = null
     }
   },
-  extraReducers: builder => {
+  extraReducers: (builder) => {
     builder
-      .addCase(checkAuthStatus.pending, state => {
+      // Check Auth Status cases
+      .addCase(checkAuthStatus.pending, (state) => {
         state.loading = true
+        state.error = null
       })
       .addCase(checkAuthStatus.fulfilled, (state, action) => {
         state.loading = false
         state.currentUser = action.payload.currentUser
         state.isAuthenticated = true
         state.guestSetupCompleted = action.payload.guestSetupCompleted
+        state.error = null
       })
-      .addCase(checkAuthStatus.rejected, state => {
+      .addCase(checkAuthStatus.rejected, (state, action) => {
         state.loading = false
         state.isAuthenticated = false
         state.currentUser = null
+        state.error = action.payload
+      })
+      
+      // Login cases
+      .addCase(login.pending, (state) => {
+        state.loading = true
+        state.error = null
       })
       .addCase(login.fulfilled, (state, action) => {
+        state.loading = false
         state.isAuthenticated = true
         state.currentUser = action.payload.currentUser
         state.guestSetupCompleted = action.payload.guestSetupCompleted
+        state.error = null
       })
-      .addCase(login.rejected, (state) => {
+      .addCase(login.rejected, (state, action) => {
+        state.loading = false
         state.isAuthenticated = false
         state.currentUser = null
+        state.error = action.payload
       })
   }
 })
 
-export const { logout, completeGuestSetup } = authSlice.actions
+export const { logout, completeGuestSetup, clearError } = authSlice.actions
 export default authSlice.reducer
