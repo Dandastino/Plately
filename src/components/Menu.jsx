@@ -2,12 +2,13 @@ import { useState } from 'react'
 import { Link } from 'react-router' 
 import { Toast, ToastContainer } from 'react-bootstrap'
 import { ShoppingCart } from 'lucide-react'
-import { useSelector } from 'react-redux' 
+import { useSelector, useDispatch } from 'react-redux' 
+import { fetchCartItems } from '../redux/CartSlice'
 import './Menu.css'
 
 function Menu({ id, name, photo, prezzo, description, allergies, type, selectedDish, handleSelect }) {
   const isSelected = id === (selectedDish && selectedDish.id)
-
+  const dispatch = useDispatch()
   const { currentUser, isAuthenticated } = useSelector(state => state.auth)
 
   const [toastMessage, setToastMessage] = useState('')
@@ -69,6 +70,9 @@ function Menu({ id, name, photo, prezzo, description, allergies, type, selectedD
           })
         })
       }
+
+      // Aggiorna il carrello nello store Redux
+      dispatch(fetchCartItems(currentUser.id))
 
       setToastMessage(`${capitalize(name)} added to cart!`)
       setToastType('success')

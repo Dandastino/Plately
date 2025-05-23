@@ -1,54 +1,27 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router'
-import { checkAuthStatus } from '../redux/AuthSlice'
+import { useSelector, useDispatch } from 'react-redux'
 import { Button, Card, Modal, ListGroup, Badge, Container, Row, Col } from 'react-bootstrap'
+import { fetchCartItems, clearCart } from '../redux/CartSlice'
 
 const ManageCart = () => {
-    const [cartItems, setCartItems] = useState([])
     const [showModal, setShowModal] = useState(false)
     const [totalPrice, setTotalPrice] = useState(0)
-    const { currentUser, isAuthenticated } = checkAuthStatus()
     const navigate = useNavigate()
+    const dispatch = useDispatch()
+    
+    const { currentUser, isAuthenticated } = useSelector(state => state.auth)
+    const { items: cartItems, loading } = useSelector(state => state.cart)
 
     useEffect(() => {
         if (isAuthenticated && currentUser) {
-            fetchCartItems()
+            dispatch(fetchCartItems(currentUser.id))
         }
-    }, [isAuthenticated, currentUser])
+    }, [isAuthenticated, currentUser, dispatch])
 
-    const fetchCartItems = async () => {
-        try {
-            // Prima otteniamo il cart_id dell'utente
-            const cartResponse = await fetch(`http://localhost:3000/cart?user_id=eq.${currentUser.id}`)
-            const cartData = await cartResponse.json()
-            
-            if (cartData.length === 0) {
-                setCartItems([])
-                return
-            }
-            
-            const cartId = cartData[0].id
-            
-            // Poi otteniamo gli items del carrello
-            const itemsResponse = await fetch(`http://localhost:3000/cart_dish?cart_id=eq.${cartId}`)
-            const itemsData = await itemsResponse.json()
-            
-            const itemsWithDetails = await Promise.all(
-                itemsData.map(async (item) => {
-                    const dishResponse = await fetch(`http://localhost:3000/dishes?id=eq.${item.dish_id}`)
-                    const dishData = await dishResponse.json()
-                    return {
-                        ...item,
-                        ...dishData[0]
-                    }
-                })
-            )
-            setCartItems(itemsWithDetails)
-            calculateTotal(itemsWithDetails)
-        } catch (error) {
-            console.error('Error fetching cart items:', error)
-        }
-    }
+    useEffect(() => {
+        calculateTotal(cartItems)
+    }, [cartItems])
 
     const calculateTotal = (items) => {
         const total = items.reduce((sum, item) => sum + (item.prezzo * item.quantity), 0)
@@ -76,7 +49,7 @@ const ManageCart = () => {
                 })
             })
             
-            fetchCartItems()
+            dispatch(fetchCartItems(currentUser.id))
         } catch (error) {
             console.error('Error updating quantity:', error)
         }
@@ -95,7 +68,7 @@ const ManageCart = () => {
                 method: 'DELETE'
             })
             
-            fetchCartItems()
+            dispatch(fetchCartItems(currentUser.id))
         } catch (error) {
             console.error('Error removing item:', error)
         }
@@ -115,8 +88,8 @@ const ManageCart = () => {
                 method: 'DELETE'
             })
             
+            dispatch(clearCart())
             setShowModal(true)
-            setCartItems([])
             setTotalPrice(0)
         } catch (error) {
             console.error('Error placing order:', error)
@@ -130,6 +103,14 @@ const ManageCart = () => {
                 <Button variant="primary" onClick={() => navigate('/login')}>
                     Go to Login
                 </Button>
+            </Container>
+        )
+    }
+
+    if (loading) {
+        return (
+            <Container className="mt-5 text-center">
+                <h2>Loading cart...</h2>
             </Container>
         )
     }
@@ -153,12 +134,7 @@ const ManageCart = () => {
                                     <ListGroup.Item key={item.id} className="mb-3">
                                         <Row className="align-items-center">
                                             <Col md={2}>
-                                                <img 
-                                                    src={item.photo || "/placeholder.jpg"} 
-                                                    alt={item.name} 
-                                                    className="img-fluid rounded"
-                                                    style={{ maxHeight: '100px' }}
-                                                />
+                                                <img src={item.photo || "/placeholder.jpg"}  alt={item.name}  className="img-fluid rounded" style={{ maxHeight: '100px' }} />
                                             </Col>
                                             <Col md={4}>
                                                 <h5>{item.name}</h5>
@@ -169,31 +145,19 @@ const ManageCart = () => {
                                             </Col>
                                             <Col md={2}>
                                                 <div className="d-flex align-items-center">
-                                                    <Button
-                                                        variant="outline-secondary"
-                                                        size="sm"
-                                                        onClick={() => updateQuantity(item.dish_id, item.quantity - 1)}
-                                                    >
+                                                    <Button variant="outline-secondary" size="sm" onClick={() => updateQuantity(item.dish_id, item.quantity - 1)}>
                                                         -
                                                     </Button>
                                                     <Badge bg="secondary" className="mx-2">
                                                         {item.quantity}
                                                     </Badge>
-                                                    <Button
-                                                        variant="outline-secondary"
-                                                        size="sm"
-                                                        onClick={() => updateQuantity(item.dish_id, item.quantity + 1)}
-                                                    >
+                                                    <Button variant="outline-secondary" size="sm" onClick={() => updateQuantity(item.dish_id, item.quantity + 1)}>
                                                         +
                                                     </Button>
                                                 </div>
                                             </Col>
                                             <Col md={2}>
-                                                <Button
-                                                    variant="danger"
-                                                    size="sm"
-                                                    onClick={() => removeItem(item.dish_id)}
-                                                >
+                                                <Button variant="danger" size="sm" onClick={() => removeItem(item.dish_id)}>
                                                     Remove
                                                 </Button>
                                             </Col>
@@ -211,11 +175,7 @@ const ManageCart = () => {
                                         <span>Subtotal:</span>
                                         <span>€{totalPrice.toFixed(2)}</span>
                                     </div>
-                                    <Button 
-                                        variant="success" 
-                                        className="w-100"
-                                        onClick={placeOrder}
-                                    >
+                                    <Button variant="success" className="w-100"onClick={placeOrder}>
                                         Place Order
                                     </Button>
                                 </Card.Body>
@@ -233,10 +193,7 @@ const ManageCart = () => {
                     <p>Your order has been placed successfully. Please wait for a waiter to assist you.</p>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="primary" onClick={() => {
-                        setShowModal(false)
-                        navigate('/Home')
-                    }}>
+                    <Button variant="primary" onClick={() => {setShowModal(false), navigate('/Home') }}>
                         Back to Menu
                     </Button>
                 </Modal.Footer>
