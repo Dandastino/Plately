@@ -12,14 +12,14 @@ Welcome to Plately! This application allows customers to browse a restaurant men
 
 *   **Frontend:** React, Redux, Bootstrap, Custom CSS
 *   **Backend:** PostgreSQL (Database via Docker), PostgREST (API Layer)
-*   **Containerization:** Docker, Docker Compose
+*   **Containerization:** Docker
 
 ## 📦 Prerequisites
 
 Before you start, ensure you have these installed:
 
-1.  [Node.js](https://nodejs.org/) (v16+ recommended, includes npm)
-2.  [Docker Desktop](https://www.docker.com/products/docker-desktop/) (includes Docker and Docker Compose)
+1.  [Node.js](https://nodejs.org/) 
+2.  [Docker Desktop](https://www.docker.com/products/docker-desktop/) 
 3.  [Git](https://git-scm.com/)
 
 ## 🚀 Quick Start Guide
@@ -34,8 +34,6 @@ Follow these steps to get Plately up and running:
 
 2.  **Environment File (`.env`):**
     This project includes a `.env` file with pre-configured settings for local development (database credentials, ports). It is used by Docker Compose.
-    *   You can review this file. The database will be accessible on port 5433.
-    *   **Note on `.env` files:** Typically, `.env` files are not committed to Git for security. For this project's local development setup with default credentials, it's included for convenience. For production or sensitive data, always use a `.env.example` and add `.env` to `.gitignore`.
 
 3.  **Install Dependencies:**
     ```bash
