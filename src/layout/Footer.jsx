@@ -7,6 +7,8 @@ import { logout } from '../redux/AuthSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import axios from 'axios'
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000'
+
 const Footer = ({ onTableClose }) => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
@@ -19,10 +21,10 @@ const Footer = ({ onTableClose }) => {
 
   const clearCart = async () => {
     try {
-      const cartResponse = await axios.get(`http://localhost:3000/cart?user_id=eq.${currentUser?.id}`)
+      const cartResponse = await axios.get(`${API_URL}/cart?user_id=eq.${currentUser?.id}`)
       if (cartResponse.data.length > 0) {
         const cartId = cartResponse.data[0].id
-        await axios.delete(`http://localhost:3000/cart_dish?cart_id=eq.${cartId}`)
+        await axios.delete(`${API_URL}/cart_dish?cart_id=eq.${cartId}`)
       }
     } catch (error) {
       console.error('Error clearing cart:', error)

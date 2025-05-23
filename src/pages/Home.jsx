@@ -5,6 +5,8 @@ import Menu from "../components/Menu"
 import { useSearchParams } from "react-router"
 import './Home.css'
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000'
+
 const Home = () => {
     const [dishes, setDishes] = useState([])
     const [loading, setLoading] = useState(true)
@@ -18,7 +20,7 @@ const Home = () => {
     const fetchMenu = async () => {
         try {
             setLoading(true)
-            let url = "http://localhost:3000/dishes"
+            let url = `${API_URL}/dishes`
             const params = []
     
             if (type) params.push(`type=eq.${type}`)

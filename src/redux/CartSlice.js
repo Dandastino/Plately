@@ -1,10 +1,12 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000'
+
 export const fetchCartItems = createAsyncThunk(
   'cart/fetchItems',
   async (userId, { rejectWithValue }) => {
     try {
-      const cartResponse = await fetch(`http://localhost:3000/cart?user_id=eq.${userId}`)
+      const cartResponse = await fetch(`${API_URL}/cart?user_id=eq.${userId}`)
       const cartData = await cartResponse.json()
       
       if (cartData.length === 0) {
@@ -13,12 +15,12 @@ export const fetchCartItems = createAsyncThunk(
       
       const cartId = cartData[0].id
       
-      const itemsResponse = await fetch(`http://localhost:3000/cart_dish?cart_id=eq.${cartId}`)
+      const itemsResponse = await fetch(`${API_URL}/cart_dish?cart_id=eq.${cartId}`)
       const itemsData = await itemsResponse.json()
       
       const itemsWithDetails = await Promise.all(
         itemsData.map(async (item) => {
-          const dishResponse = await fetch(`http://localhost:3000/dishes?id=eq.${item.dish_id}`)
+          const dishResponse = await fetch(`${API_URL}/dishes?id=eq.${item.dish_id}`)
           const dishData = await dishResponse.json()
           return {
             ...item,

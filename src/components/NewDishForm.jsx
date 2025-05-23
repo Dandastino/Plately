@@ -1,6 +1,8 @@
 import { useState } from "react"
 import { Alert, Button, Form, Container, Row, Col } from "react-bootstrap"
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000'
+
 const NewDishForm = () => {
   const [name, setName] = useState("")
   const [type, setType] = useState("appetizer")
@@ -56,7 +58,7 @@ const NewDishForm = () => {
     }
 
     try {
-      const response = await fetch("http://localhost:3000/dishes", {
+      const response = await fetch(`${API_URL}/dishes`, {
         method: "POST",
         headers: { "Content-Type": "application/json",},
         body: JSON.stringify(dishData),

@@ -4,6 +4,8 @@ import { useSelector, useDispatch } from 'react-redux'
 import { Button, Card, Modal, ListGroup, Badge, Container, Row, Col } from 'react-bootstrap'
 import { fetchCartItems, clearCart } from '../redux/CartSlice'
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000'
+
 const ManageCart = () => {
     const [showModal, setShowModal] = useState(false)
     const [totalPrice, setTotalPrice] = useState(0)
@@ -32,14 +34,14 @@ const ManageCart = () => {
         if (newQuantity < 1) return
         
         try {
-            const cartResponse = await fetch(`http://localhost:3000/cart?user_id=eq.${currentUser.id}`)
+            const cartResponse = await fetch(`${API_URL}/cart?user_id=eq.${currentUser.id}`)
             const cartData = await cartResponse.json()
             
             if (cartData.length === 0) return
             
             const cartId = cartData[0].id
             
-            await fetch(`http://localhost:3000/cart_dish?cart_id=eq.${cartId}&dish_id=eq.${dishId}`, {
+            await fetch(`${API_URL}/cart_dish?cart_id=eq.${cartId}&dish_id=eq.${dishId}`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json'
@@ -57,14 +59,14 @@ const ManageCart = () => {
 
     const removeItem = async (dishId) => {
         try {
-            const cartResponse = await fetch(`http://localhost:3000/cart?user_id=eq.${currentUser.id}`)
+            const cartResponse = await fetch(`${API_URL}/cart?user_id=eq.${currentUser.id}`)
             const cartData = await cartResponse.json()
             
             if (cartData.length === 0) return
             
             const cartId = cartData[0].id
             
-            await fetch(`http://localhost:3000/cart_dish?cart_id=eq.${cartId}&dish_id=eq.${dishId}`, {
+            await fetch(`${API_URL}/cart_dish?cart_id=eq.${cartId}&dish_id=eq.${dishId}`, {
                 method: 'DELETE'
             })
             
@@ -76,7 +78,7 @@ const ManageCart = () => {
 
     const placeOrder = async () => {
         try {
-            const cartResponse = await fetch(`http://localhost:3000/cart?user_id=eq.${currentUser.id}`)
+            const cartResponse = await fetch(`${API_URL}/cart?user_id=eq.${currentUser.id}`)
             const cartData = await cartResponse.json()
             
             if (cartData.length === 0) return
@@ -84,7 +86,7 @@ const ManageCart = () => {
             const cartId = cartData[0].id
             
             // Elimina tutti gli elementi dal carrello
-            await fetch(`http://localhost:3000/cart_dish?cart_id=eq.${cartId}`, {
+            await fetch(`${API_URL}/cart_dish?cart_id=eq.${cartId}`, {
                 method: 'DELETE'
             })
             

@@ -23,7 +23,7 @@ const ManageDishForm = () => {
     const [showDeleteConfirmModal, setShowDeleteConfirmModal] = useState(false);
     const [dishToDelete, setDishToDelete] = useState(null);
 
-    const API_BASE_URL = "http://localhost:3000"
+    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000'
 
     // Load all dishes 
     useEffect(() => {
@@ -70,7 +70,7 @@ const ManageDishForm = () => {
     const fetchDishes = async () => {
         setLoading(true)
         try {
-            const data = await apiRequest(`${API_BASE_URL}/dishes`)
+            const data = await apiRequest(`${API_URL}/dishes`)
             setDishes(data)
         } catch (error) {
             setErrors({ form: `Error fetching dishes: ${error.message}` })
@@ -88,7 +88,7 @@ const ManageDishForm = () => {
             if (dishToEdit) {
                 populateForm(dishToEdit)
             } else {
-                const results = await apiRequest(`${API_BASE_URL}/dishes?id=eq.${dishId}`)
+                const results = await apiRequest(`${API_URL}/dishes?id=eq.${dishId}`)
                 const dishData = results[0]
                 populateForm(dishData)
             }
@@ -126,7 +126,7 @@ const ManageDishForm = () => {
         setShowDeleteConfirmModal(false); 
 
         try {
-            await apiRequest(`${API_BASE_URL}/dishes?id=eq.${dishToDelete}`, "DELETE");
+            await apiRequest(`${API_URL}/dishes?id=eq.${dishToDelete}`, "DELETE");
             setResponse({ id: dishToDelete, message: "Dish deleted successfully" });
             setDishToDelete(null); 
             fetchDishes(); 
@@ -159,7 +159,7 @@ const ManageDishForm = () => {
                 prezzo: price ? parseFloat(price) : 0,
             }
             
-            await apiRequest(`${API_BASE_URL}/dishes?id=eq.${currentDishId}`, "PATCH", dishData)
+            await apiRequest(`${API_URL}/dishes?id=eq.${currentDishId}`, "PATCH", dishData)
             
             setResponse({id: currentDishId, message: "Dish updated successfully"})  
             setDishes(dishes.map(dish => dish.id === currentDishId ? {...dish, ...dishData} : dish))

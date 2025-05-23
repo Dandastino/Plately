@@ -6,6 +6,8 @@ import { useSelector, useDispatch } from 'react-redux'
 import { fetchCartItems } from '../redux/CartSlice'
 import './Menu.css'
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000'
+
 function Menu({ id, name, photo, prezzo, description, allergies, type, selectedDish, handleSelect }) {
   const isSelected = id === (selectedDish && selectedDish.id)
   const dispatch = useDispatch()
@@ -27,7 +29,7 @@ function Menu({ id, name, photo, prezzo, description, allergies, type, selectedD
     }
 
     try {
-      const cartRes = await fetch(`http://localhost:3000/cart?user_id=eq.${currentUser.id}`)
+      const cartRes = await fetch(`${API_URL}/cart?user_id=eq.${currentUser.id}`)
       const cartData = await cartRes.json()
 
       if (cartData.length === 0) {
@@ -40,7 +42,7 @@ function Menu({ id, name, photo, prezzo, description, allergies, type, selectedD
       const cartId = cartData[0].id
 
       const existingItemRes = await fetch(
-        `http://localhost:3000/cart_dish?cart_id=eq.${cartId}&dish_id=eq.${id}`
+        `${API_URL}/cart_dish?cart_id=eq.${cartId}&dish_id=eq.${id}`
       )
       const existingItemData = await existingItemRes.json()
 
@@ -48,7 +50,7 @@ function Menu({ id, name, photo, prezzo, description, allergies, type, selectedD
         const currentQuantity = existingItemData[0].quantity
 
         await fetch(
-          `http://localhost:3000/cart_dish?cart_id=eq.${cartId}&dish_id=eq.${id}`,
+          `${API_URL}/cart_dish?cart_id=eq.${cartId}&dish_id=eq.${id}`,
           {
             method: 'PATCH',
             headers: {
@@ -58,7 +60,7 @@ function Menu({ id, name, photo, prezzo, description, allergies, type, selectedD
           }
         )
       } else {
-        await fetch('http://localhost:3000/cart_dish', {
+        await fetch(`${API_URL}/cart_dish`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'

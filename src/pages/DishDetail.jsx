@@ -10,6 +10,7 @@ const DishDetail = () => {
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(null)
     const { dishID } = useParams()
+    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000'
 
     useEffect(() =>{
         const fetchDish = async () => {
@@ -17,7 +18,7 @@ const DishDetail = () => {
                 setLoading(true)
                 setError(null)
 
-                const response = await fetch(`http://localhost:3000/dishes?id=eq.${dishID}`)
+                const response = await fetch(`${API_URL}/dishes?id=eq.${dishID}`)
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`)
                 }

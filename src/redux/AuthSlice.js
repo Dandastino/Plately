@@ -1,5 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000'
+
 const initialState = {
   currentUser: null,
   isAuthenticated: false,
@@ -21,7 +23,7 @@ export const checkAuthStatus = createAsyncThunk(
       let userData = storedUserData ? JSON.parse(storedUserData) : null
 
       if (!userData && userId) {
-        const res = await fetch(`http://localhost:3000/users?id=eq.${userId}`)
+        const res = await fetch(`${API_URL}/users?id=eq.${userId}`)
         if (!res.ok) throw new Error('Network response was not ok')
         
         const data = await res.json()
@@ -55,7 +57,7 @@ export const login = createAsyncThunk(
   'auth/login',
   async ({ username, password }, { rejectWithValue }) => {
     try {
-      const res = await fetch('http://localhost:3000/users')
+      const res = await fetch(`${API_URL}/users`)
       if (!res.ok) throw new Error('Network response was not ok')
       
       const data = await res.json()
