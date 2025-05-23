@@ -45,7 +45,7 @@ Follow these steps to get Plately up and running:
 4.  **Start Docker Services (Database & PostgREST API):**
     This command starts PostgreSQL and PostgREST. On the first run, it also automatically creates the database tables and adds sample data using scripts in the `./database` folder.
     ```bash
-    docker compose up -d
+    docker compose down -v && docker compose up -d
     ```
     *   **Verify services:** `docker compose ps` (Look for `plately-db-1` and `plately-api-1` running).
     *   **(Optional) View DB logs (first run):** `docker compose logs db`.
@@ -70,12 +70,3 @@ Follow these steps to get Plately up and running:
 
 *   **Admin:** Username: `admin`, Password: `admin`
 *   **Customer:** Username: `user`, Password: `user`
-
-## Troubleshooting Tips
-
-*   **Port Conflicts:** If ports (3000, 5173, 5433) are in use, stop the other service or reconfigure Plately's ports.
-*   **Docker Issues:** Ensure Docker Desktop is running. Try `docker compose down && docker compose up -d --build`.
-*   **Database Connection:** Check Docker services are up and `.env` credentials are correct.
-
-Enjoy using Plately!
-
