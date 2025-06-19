@@ -47,7 +47,7 @@ const Footer = ({ onTableClose }) => {
       }
 
       localStorage.clear()
-      navigate("/login") // puoi anche reindirizzare dopo il logout
+      navigate("/login") 
     } catch (error) {
       console.error("Logout error:", error)
     } finally {
@@ -74,8 +74,8 @@ const Footer = ({ onTableClose }) => {
           ⚙️ Admin
         </div>
 
-        <div className="footer-item" title="Show cart" onClick={() => navigate("/cart")}>
-          🛒 Cart
+        <div className="footer-item" title="Show order" onClick={() => navigate("/order")}>
+          🧾 Order
         </div>
 
         <div className="footer-item close-table" title="Close Table" onClick={handleCloseTable}>

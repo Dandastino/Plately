@@ -33,7 +33,7 @@ const AppContent = () => {
         <Route path='/' element={<Layout />}>
           <Route path='/guest' element={<Guest />} />
           <Route path='/home' element={<Home />} />
-          <Route path='/cart' element={<Cart />} />
+          <Route path='/order' element={<Cart />} />
           <Route path='/dishes/:dishID' element={<DishDetail />} />
           <Route element={<ProtectedRoute requiredRole="admin" />}>
             <Route path='/admin' element={<Admin />} />

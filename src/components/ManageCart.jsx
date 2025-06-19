@@ -119,10 +119,10 @@ const ManageCart = () => {
 
     return (
         <Container className="mt-4">
-            <h2 className="text-center mb-4">Your Cart</h2>
+            <h2 className="text-center mb-4">Your Orders</h2>
             {cartItems.length === 0 ? (
                 <div className="text-center">
-                    <p>Your cart is empty</p>
+                    <p>You don't have anything in your order list</p>
                     <Button variant="primary" onClick={() => navigate('/Home')}>
                         Browse Menu
                     </Button>
