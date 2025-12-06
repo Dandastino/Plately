@@ -1,18 +1,22 @@
 # 🍽️ Plately - Restaurant Menu App
 
-Welcome to Plately! This application allows customers to browse a restaurant menu, filter by preferences, and place orders. Administrators can manage the menu items.
+Welcome to Plately! This Front-End application allows customers to browse a restaurant menu, filter by preferences, and place orders. Administrators can manage the menu items.
+
+![React](https://img.shields.io/badge/Frontend-React-61DAFB?logo=react&logoColor=black)
+![Redux](https://img.shields.io/badge/State%20Management-Redux-764ABC?logo=redux&logoColor=white)
+![Bootstrap](https://img.shields.io/badge/CSS%20Framework-Bootstrap-7952B3?logo=bootstrap&logoColor=white)
+![Custom CSS](https://img.shields.io/badge/Styling-Custom%20CSS-1572B6?logo=css3&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/Database-PostgreSQL-336791?logo=postgresql&logoColor=white)
+![PostgREST](https://img.shields.io/badge/API%20Layer-PostgREST-1793D1?logo=postgrest&logoColor=white)
+![Docker](https://img.shields.io/badge/Containerization-Docker-2496ED?logo=docker&logoColor=white)
+
+---
 
 ## ✨ Features
 
 *   **For Customers:** View menu, filter dishes (by course, allergies), add to cart, submit orders.
 *   **For Admins:** Manage menu (add, edit, remove dishes).
 *   **Technical:** Responsive design, RESTful API, user authentication.
-
-## 🛠️ Tech Stack
-
-*   **Frontend:** React, Redux, Bootstrap, Custom CSS
-*   **Backend:** PostgreSQL (Database via Docker), PostgREST (API Layer)
-*   **Containerization:** Docker
 
 ## 📦 Prerequisites
 
